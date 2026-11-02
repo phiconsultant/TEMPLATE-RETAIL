@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Proposal mẫu ngành bán lẻ: 6 nhu cầu, 18 luồng và 90 màn hình mô phỏng. CNVCDP – Nguyễn Phi.">
+<title>CNVCDP — Giải pháp tăng trưởng ngành bán lẻ</title>
+<style>
+/* ======================================================
+   01. DESIGN SYSTEM — THAY MÀU, CHỮ, CHIỀU RỘNG TẠI ĐÂY
+   ====================================================== */
+:root{--primary:#d51d50;--pink:#ff88ad;--purple:#6954e8;--ink:#1b1d34;--muted:#626b80;--border:#e8e8f1;--soft:#fff1f6;--paper:#fff;--surface:#f8f9fd;--max:1380px;--pad:clamp(18px,3.6vw,60px);--section-y:90px;--radius:24px;--shadow:0 16px 44px #2424480b;--body-font:Inter,"Segoe UI",Arial,sans-serif;--hero-size:clamp(38px,5.2vw,76px);--section-size:clamp(28px,3.2vw,46px);--flow-size:clamp(21px,2vw,29px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;color:var(--ink);background:var(--paper);font:16px/1.65 var(--body-font)}h1,h2,h3,h4,p{margin:0}h1,h2,h3{line-height:1.2}button,input,select{font:inherit}button,a,input{touch-action:manipulation}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--purple);outline-offset:4px}a{color:inherit;text-decoration:none}img{max-width:100%;display:block}button{color:inherit}button:disabled{cursor:default}small{font-size:12px}.container{width:min(calc(100% - var(--pad)*2),var(--max));margin:auto}.muted{color:var(--muted)}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.16em;font-weight:800;color:var(--primary)}.btn{display:inline-flex;gap:10px;align-items:center;justify-content:center;padding:12px 21px;border-radius:100px;border:1px solid var(--border);background:white;font-size:14px;font-weight:700}.btn.primary{background:var(--primary);border-color:var(--primary);color:white}.btn:hover{filter:brightness(.97)}.pill{display:inline-flex;align-items:center;gap:7px;border-radius:30px;padding:5px 11px;background:var(--soft);font-size:12px;font-weight:700;color:var(--primary)}[hidden]{display:none!important}
+/* 02. HEADER + HERO */
+.header{position:sticky;top:0;background:#ffffffed;backdrop-filter:blur(16px);border-bottom:1px solid var(--border);z-index:20}.header-row{min-height:78px;display:flex;align-items:center;gap:28px;justify-content:space-between}.brand-lockup{display:flex;align-items:center;gap:10px;flex:none}.brand-lockup img{width:76px;height:61px;object-fit:contain}.brand-lockup span{border-left:1px solid var(--border);padding-left:12px;font-size:11px;line-height:1.5;color:var(--muted);letter-spacing:.08em}.mainnav{display:flex;gap:21px;font-size:13px;font-weight:650;align-items:center}.header-tools{display:flex;gap:9px}.header-tools .btn{font-size:12px;padding:9px 15px}.hero{position:relative;isolation:isolate;overflow:hidden;background:#fff;text-align:center;padding:86px 0 68px}.hero:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 12% 5%,#ffdce9 0,transparent 42%),radial-gradient(ellipse at 92% 4%,#eae7ff 0,transparent 40%),radial-gradient(ellipse at 50% 100%,#fff0f6 0,transparent 60%)}.hero:after{content:"";position:absolute;inset:0;z-index:-1;opacity:.45;background-image:linear-gradient(#dadce730 1px,transparent 1px),linear-gradient(90deg,#dadce730 1px,transparent 1px);background-size:58px 58px}.hero-badge{display:inline-flex;padding:7px 14px;border:1px solid var(--border);border-radius:40px;gap:10px;background:#ffffffd9;font-size:12px;align-items:center}.hero h1{font-size:var(--hero-size);letter-spacing:-.045em;max-width:1060px;margin:23px auto 21px;font-weight:800}.gradient{color:var(--primary);background:linear-gradient(95deg,var(--primary),#fa668e 46%,var(--purple));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hero-copy{max-width:760px;margin:0 auto;font-size:18px;color:#4b566e}.hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:28px 0 20px}.hero-note{font-size:12px;color:var(--muted)}.hero-path{display:grid;grid-template-columns:repeat(6,1fr);margin:45px auto 0;max-width:1120px;background:#ffffffd9;border:1px solid var(--border);border-radius:22px;padding:18px 10px;box-shadow:var(--shadow)}.path-item{padding:4px 12px;text-align:left;border-right:1px solid var(--border);font-size:12px;font-weight:700}.path-item:last-child{border:0}.path-item b{font-size:11px;color:var(--primary);display:block;letter-spacing:.1em;margin-bottom:4px}.overview{padding:60px 0 0}.overview-top{display:flex;gap:22px;align-items:end;justify-content:space-between;margin-bottom:25px}.overview h2{font-size:28px;letter-spacing:-.025em}.overview-top p{max-width:510px;color:var(--muted);font-size:14px}.overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.insight-link{padding:20px 22px;border:1px solid var(--border);border-radius:16px;display:flex;gap:15px;align-items:start;transition:200ms;background:white}.insight-link:hover{border-color:var(--pink);transform:translateY(-2px)}.insight-link b{font-size:12px;color:var(--primary);padding-top:2px}.insight-link span{font-size:14px;font-weight:650;line-height:1.5}.overview-hint{font-size:12px;color:var(--muted);margin-top:17px}
+/* 03. SECTION + FLOW */
+.content-section{padding:var(--section-y) 0 0;scroll-margin-top:10px}.section-head{border-top:1px solid var(--border);padding-top:35px}.section-kicker{display:flex;gap:15px;align-items:center;margin-bottom:15px}.section-index{background:var(--ink);color:white;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:12px;font-weight:800}.section-head h2{font-size:var(--section-size);letter-spacing:-.035em;max-width:1100px}.insight-band{margin:23px 0 15px;padding:21px 25px;background:linear-gradient(100deg,var(--soft),#f5f3ff);border-radius:17px;display:grid;grid-template-columns:1fr 1.25fr;gap:30px}.insight-band strong{display:block;font-size:17px;margin-top:5px;line-height:1.5}.insight-band p{font-size:14px;color:var(--muted)}.insight-band .label{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--primary);font-weight:800}.tags{display:flex;gap:7px;flex-wrap:wrap}.tags span{font-size:11px;padding:4px 10px;border:1px solid var(--border);border-radius:20px;color:var(--muted)}.flow{margin-top:36px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:white;box-shadow:var(--shadow)}.flow-head{padding:28px 30px 0;display:flex;gap:16px;align-items:start}.flow-number{flex:none;font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--primary);background:var(--soft);border-radius:8px;padding:6px 9px}.flow h3{font-size:var(--flow-size);letter-spacing:-.025em}.flow-problem{padding:12px 30px 0;max-width:990px;font-size:14px;color:var(--muted)}.flow-problem strong{color:var(--ink)}.flow-caption{padding:14px 30px 0;font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center}.dot{display:inline-block;width:6px;height:6px;background:var(--pink);border-radius:50%}.screens{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:24px;padding:25px 30px 28px;background:linear-gradient(180deg,#fff,#f8f9fd)}.screen-step{min-width:0;position:relative}.step-label{display:flex;align-items:start;gap:7px;margin:15px 0 0;line-height:1.5}.step-label b{display:grid;place-items:center;width:20px;height:20px;flex:none;border-radius:7px;background:var(--soft);color:var(--primary);font-size:10px}.step-label span{font-size:12px;font-weight:750;padding-top:1px}.step-desc{font-size:11px;color:var(--muted);line-height:1.55;margin-top:6px}.screen-step:not(:last-child):after{content:'→';position:absolute;right:-20px;top:39%;font-size:16px;color:#b7b5c7}.screen-trigger{padding:0;border:0;background:none;display:block;width:100%;border-radius:31px;text-align:left}.screen-trigger:hover .phone{transform:translateY(-4px);box-shadow:0 18px 25px #25254024}.zoom-label{position:absolute;top:10px;right:12px;opacity:0;background:white;border-radius:12px;padding:3px 8px;font-size:10px;color:var(--primary)}.screen-trigger:hover .zoom-label,.screen-trigger:focus-visible .zoom-label{opacity:1}.outcomes{padding:23px 30px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:30px}.outcome-label{font-size:10px;letter-spacing:.09em;font-weight:800;color:var(--primary);text-transform:uppercase;margin-bottom:5px}.outcomes p{font-size:13px;color:#46516a}.condition{border-top:1px solid var(--border);padding:12px 30px;background:#fafafe;font-size:11px;color:var(--muted)}
+/* 04. PHONE MOCKUPS — GIAO DIỆN HTML, KHÔNG PHẢI ẢNH CHỤP SẢN PHẨM */
+.phone{position:relative;width:100%;aspect-ratio:9/19.5;background:#1d1e25;padding:5px;border-radius:31px;box-shadow:0 10px 18px #2525401b;transition:200ms;border:1px solid #595a62}.phone:before{content:'';position:absolute;width:2px;height:25px;background:#555660;left:-3px;top:22%;border-radius:2px}.phone-glass{height:100%;position:relative;background:#f7f7fb;border-radius:25px;overflow:hidden;display:flex;flex-direction:column;container-type:inline-size}.statusbar{height:31px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:5px 12px 0;font-size:9px;font-weight:750;color:#16182c;background:white}.island{position:absolute;width:31%;height:14px;background:#171821;top:7px;left:34.5%;border-radius:12px}.status-icons{font-size:8px;letter-spacing:-.3px}.appbar{height:34px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 10px;background:white;border-bottom:1px solid #ececf3;font-size:10px;font-weight:750}.appbar .app-name{max-width:76%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.appmark{color:var(--primary);font-weight:900;margin-right:3px}.appbody{padding:10px;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:8px}.appbody>*{flex-shrink:0}.appbody{overflow-y:auto;scrollbar-width:none}.appbody::-webkit-scrollbar{display:none}.app-title{font-weight:800;font-size:13px;line-height:1.35;letter-spacing:-.02em}.app-detail{font-size:9px;line-height:1.55;color:#71778a}.appbadge{align-self:flex-start;font-size:7px;line-height:1.5;padding:3px 6px;background:var(--soft);color:var(--primary);border-radius:20px;font-weight:700}.appcard{padding:10px;border-radius:12px;background:white;border:1px solid #ececf4;font-size:9px;line-height:1.55}.appcard h4{font-size:11px;line-height:1.4;margin-bottom:4px}.appcard.dark{background:linear-gradient(135deg,#292743,#565172);color:white;border:0}.appcard.pink{background:linear-gradient(125deg,var(--soft),#f0eaff);border-color:#f0dfe9}.appcard strong{font-size:17px;line-height:1.4}.app-row{display:flex;justify-content:space-between;gap:5px;padding:5px 0;border-bottom:1px solid #f0f0f7;font-size:9px}.app-row:last-child{border:0}.appsmall{font-size:8px;color:#7a7d91}.app-actions{padding:0 10px 9px;margin-top:auto}.app-btn{background:var(--primary);color:white;border-radius:10px;text-align:center;font-weight:750;font-size:10px;padding:9px 5px;line-height:1.35}.appnav{height:35px;background:white;border-top:1px solid #eee;display:flex;align-items:center;justify-content:space-around;padding:2px 4px 7px;font-size:6px;line-height:1.4;color:#85889a;flex:none}.appnav span{display:flex;flex-direction:column;align-items:center}.appnav i{font-size:12px;font-style:normal;line-height:1.2}.appnav .active{color:var(--primary)}.home-indicator{position:absolute;bottom:3px;left:34%;height:3px;width:32%;background:#262735;border-radius:3px}.art{height:75px;position:relative;overflow:hidden;border-radius:11px;background:linear-gradient(135deg,#ffe8ef,#eee9ff);display:flex;align-items:center;justify-content:center}.art.large{height:113px}.bottle{height:48px;width:29px;border-radius:6px;background:linear-gradient(100deg,#e6aab9,#f7d4de 50%,#e8b5c4);position:relative;margin:5px}.bottle:before{content:'';height:9px;width:18px;border-radius:3px 3px 0 0;background:#b78294;position:absolute;left:6px;top:-6px}.bottle:after{content:'CNV';position:absolute;inset:17px 3px 10px;background:#ffffffb0;text-align:center;font-size:7px;line-height:15px;color:#925b70}.bottle.tall{height:61px;width:30px;background:linear-gradient(100deg,#b0abc9,#e8e4f4,#b8b3cf)}.box{height:53px;width:41px;background:linear-gradient(105deg,#e6d4b9,#faf0dc);border-radius:4px;display:grid;place-items:center;font-size:8px;color:#9c8568;margin:5px;transform:rotate(-7deg);box-shadow:3px 6px 7px #66506c19}.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.product-grid .art{height:62px}.product-grid p{font-size:8px;font-weight:700;margin-top:4px;line-height:1.4}.product-grid b{font-size:9px;color:var(--primary)}.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#fdd6e4,#ded7fc);display:grid;place-items:center;color:var(--primary);font-size:12px;font-weight:800;flex:none}.avatar-row{display:flex;gap:9px;align-items:center}.progress{height:5px;background:#e4ddeb;border-radius:5px;margin:9px 0 5px;overflow:hidden}.progress:before{content:'';display:block;height:100%;width:86%;background:linear-gradient(90deg,var(--pink),var(--purple));border-radius:5px}.voucher-ticket{border:1px dashed #e39db3;padding:11px;border-radius:11px;background:var(--soft)}.voucher-ticket strong{font-size:23px;color:var(--primary);display:block;line-height:1.2}.field{padding:8px;border:1px solid #e6e4ef;border-radius:7px;font-size:9px;background:white}.check{font-size:8px;line-height:1.65;color:#73778a}.check:before{content:'✓ ';color:var(--primary);font-weight:900}.bubble{padding:10px;background:white;border:1px solid #e9e8f1;border-radius:0 13px 13px 13px;font-size:9px;line-height:1.6}.bubble.user{margin-left:18px;background:#eeebfd;border-color:#e5def9;border-radius:12px 0 12px 12px}.msg-banner{height:78px;background:linear-gradient(120deg,var(--soft),#e8e3ff);border-radius:9px;display:flex;align-items:center;justify-content:center;gap:9px;font-weight:800;color:var(--primary);font-size:17px}.msg-link{margin-top:8px;border-top:1px solid #eee;padding-top:7px;color:var(--primary);font-size:9px;font-weight:750}.success-mark{height:60px;width:60px;border-radius:50%;background:#e4f7ed;color:#20986a;display:grid;place-items:center;font-size:30px;margin:6px auto}.center{text-align:center}.qrbox{background:white;padding:10px;border-radius:10px;border:1px solid #ededf5;width:106px;margin:4px auto}.qrbox svg{display:block;width:100%;height:auto}.timeline-item{font-size:9px;border-left:2px solid #e1d9f2;padding:0 0 12px 11px;position:relative;line-height:1.5}.timeline-item:before{content:'';position:absolute;left:-4px;top:4px;width:6px;height:6px;background:var(--primary);border-radius:50%}.choice{padding:8px;border:1px solid #e4e2ed;border-radius:8px;font-size:9px;background:white}.choice.selected{border-color:var(--pink);background:var(--soft);color:var(--primary)}.mini-chart{display:flex;gap:8px;align-items:end;height:64px;padding:8px 8px 0}.mini-chart i{flex:1;background:linear-gradient(var(--pink),var(--purple));border-radius:4px 4px 0 0}.screen-mode{font-size:6px;letter-spacing:.08em;color:var(--purple);font-weight:750}.phone .appbody{gap:7px}.phone .app-detail{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+/* 05. BUDGET + FOOTER */
+.budget{padding:95px 0 75px}.budget-wrap{border:1px solid var(--border);border-radius:25px;padding:35px;background:linear-gradient(140deg,#fff,#fcf5fa)}.budget h2{font-size:var(--section-size);letter-spacing:-.04em;margin:12px 0}.budget-intro{max-width:790px;color:var(--muted);font-size:14px}.pricing-table{width:100%;border-collapse:collapse;margin:28px 0 0;font-size:13px}.pricing-table th{text-align:left;font-size:11px;color:var(--muted);padding:12px;border-bottom:1px solid var(--border)}.pricing-table td{padding:17px 12px;border-bottom:1px solid var(--border);vertical-align:top}.pricing-table td:nth-last-child(-n+2){white-space:nowrap}.pricing-table input{accent-color:var(--primary);width:17px;height:17px}.pricing-table small{display:block;color:var(--muted);font-size:11px;max-width:460px}.price-summary{display:grid;grid-template-columns:1.3fr 1fr;gap:15px;margin-top:24px}.price-box{padding:23px;border:1px solid var(--border);background:white;border-radius:17px}.price-box.main{background:var(--ink);color:white}.price-box .sum-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.7}.price-box .sum-value{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.3;margin-top:8px}.price-box small{font-size:11px;opacity:.7;display:block;margin-top:8px}.pricing-note{margin-top:18px;font-size:12px;color:var(--muted)}.closing{background:linear-gradient(110deg,var(--soft),#f0edff);text-align:center;padding:60px 20px}.closing h2{font-size:clamp(27px,3.8vw,44px);letter-spacing:-.035em;margin:10px auto 16px;max-width:780px}.closing p{max-width:620px;margin:auto;color:var(--muted);font-size:14px}.closing .btn{margin-top:23px}.footer{padding:45px 20px 30px;text-align:center}.footer img{height:100px;width:130px;object-fit:contain;margin:0 auto 18px}.footer strong{display:block;font-size:13px;letter-spacing:.08em}.footer a{color:var(--primary)}.footer .thanks{margin-top:23px;font-size:13px;font-weight:750;letter-spacing:.09em}.footer small{display:block;color:var(--muted);margin-top:14px;font-size:11px}.empty-state{padding:40px;text-align:center;color:var(--muted)}
+/* 06. CONFIGURATION + LIGHTBOX */
+.config-panel{border:1px solid var(--border);border-radius:22px;position:fixed;right:18px;top:92px;z-index:60;width:min(410px,calc(100vw - 36px));max-height:calc(100dvh - 110px);overflow:auto;padding:23px;background:white;box-shadow:0 22px 100px #161a3640}.panel-heading{display:flex;justify-content:space-between;align-items:center}.panel-heading h2{font-size:20px}.close-btn{border:0;background:#f3f2f7;border-radius:50%;width:30px;height:30px;font-size:20px}.config-panel p{font-size:12px;color:var(--muted);margin:10px 0 15px}.config-panel label.field-label{font-size:12px;font-weight:700;display:block;margin:13px 0 5px}.config-panel input[type=text]{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:9px}.config-panel input[type=file]{max-width:100%;font-size:11px}.color-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}.color-row input{height:35px;width:55px;border:1px solid var(--border);border-radius:7px;background:white}.config-panel details{padding:12px 0;border-top:1px solid var(--border)}.config-panel summary{font-size:12px;font-weight:750;cursor:pointer}.config-panel .flow-check{display:flex;gap:9px;font-size:11px;margin-top:12px;line-height:1.5}.config-panel input[type=checkbox]{accent-color:var(--primary);flex:none}.config-panel .panel-actions{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:17px}.panel-actions .btn{font-size:11px;padding:9px 13px}.config-feedback{font-size:11px;color:var(--primary);min-height:20px;margin-top:10px}.viewer{border:0;padding:0;background:transparent;overflow:visible;max-height:95dvh;max-width:95vw}.viewer::backdrop{background:#141526d9;backdrop-filter:blur(7px)}.viewer-shell{position:relative;background:#f6f6fa;padding:19px 24px 14px;border-radius:25px;width:min(410px,94vw);max-height:94dvh;overflow:auto}.viewer-head{display:flex;align-items:start;gap:16px;justify-content:space-between;margin-bottom:12px}.viewer-head p{font-size:13px;font-weight:700;line-height:1.5}.viewer-stage{width:min(285px,66vw,33dvh * 2);margin:auto}.viewer-stage .phone{box-shadow:0 15px 40px #15172f25}.viewer-stage .statusbar{font-size:11px;height:38px;padding:7px 16px 0}.viewer-stage .island{height:18px;top:9px}.viewer-stage .appbar{height:42px;font-size:12px;padding:0 14px}.viewer-stage .appbody{padding:13px;gap:10px}.viewer-stage .app-title{font-size:17px}.viewer-stage .app-detail{font-size:12px}.viewer-stage .appcard{font-size:12px;padding:13px}.viewer-stage .appcard h4{font-size:15px}.viewer-stage .appcard strong{font-size:23px}.viewer-stage .app-row{font-size:12px}.viewer-stage .appsmall{font-size:10px}.viewer-stage .appbadge{font-size:9px}.viewer-stage .app-btn{font-size:13px;padding:12px 5px}.viewer-stage .appnav{font-size:8px;height:43px}.viewer-stage .art{height:95px}.viewer-stage .product-grid .art{height:80px}.viewer-stage .product-grid p{font-size:11px}.viewer-stage .bubble{font-size:12px}.viewer-stage .field,.viewer-stage .choice{font-size:12px}.viewer-stage .check{font-size:10px}.viewer-stage .timeline-item{font-size:12px}.viewer-stage .msg-banner{height:105px}.viewer-stage .msg-link{font-size:12px}.viewer-stage .art.large{height:140px}.viewer-stage .qrbox{width:140px}.viewer-controls{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:13px}.viewer-controls button{font-size:12px;padding:7px 12px}.viewer-controls span{font-size:11px;color:var(--muted)}.back-top{position:fixed;bottom:18px;right:18px;z-index:15;width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--border);border-radius:50%;background:white;box-shadow:var(--shadow);font-weight:750;color:var(--primary)}
+/* 07. RESPONSIVE */
+@media(min-width:1450px){.screens{gap:32px}.screen-step:not(:last-child):after{right:-25px}.phone{border-radius:35px;padding:6px}.phone-glass{border-radius:29px}.appbody{padding:13px}.app-title{font-size:15px}.app-detail{font-size:10px}.appcard{font-size:10px}.appbar{font-size:11px;height:37px}.art{height:90px}.product-grid .art{height:75px}.app-btn{font-size:11px}.appnav{font-size:7px;height:39px}.bubble{font-size:10px}.field,.choice{font-size:10px}}
+@media(max-width:1150px){.mainnav{display:none}.screens{gap:16px;padding:22px}.screen-step:not(:last-child):after{right:-13px;font-size:12px}.appbody{padding:8px;gap:5px!important}.phone{border-radius:27px;padding:4px}.phone-glass{border-radius:22px}.statusbar{height:26px;font-size:8px;padding:4px 9px 0}.island{height:12px}.appbar{height:29px;font-size:8px}.app-title{font-size:11px}.app-detail{font-size:8px}.appcard{padding:7px;font-size:8px}.appcard h4{font-size:10px}.appcard strong{font-size:15px}.art{height:58px}.art.large{height:85px}.product-grid .art{height:49px}.app-row,.field,.choice,.bubble{font-size:8px}.app-btn{font-size:9px;padding:8px 4px}.appnav{font-size:6px;height:30px}.msg-banner{height:58px}.qrbox{width:86px}.voucher-ticket strong{font-size:19px}}
+@media(max-width:900px){:root{--section-y:65px}.hero{padding:60px 0 45px}.hero-path{grid-template-columns:repeat(3,1fr);gap:15px 0}.path-item:nth-child(3){border:0}.hero-copy{font-size:16px}.overview-top{display:block}.overview-top p{margin-top:12px}.overview-grid{grid-template-columns:repeat(2,1fr)}.screens{grid-template-columns:repeat(3,minmax(0,1fr));gap:25px;padding:24px}.screen-step:after{display:none}.phone{max-width:235px;margin:auto}.appbody{padding:11px;gap:8px!important}.app-title{font-size:14px}.app-detail{font-size:10px}.appcard{font-size:10px;padding:10px}.appcard h4{font-size:12px}.appcard strong{font-size:19px}.art{height:84px}.art.large{height:115px}.product-grid .art{height:65px}.app-row,.field,.choice,.bubble{font-size:10px}.app-btn{font-size:11px}.appbar{font-size:10px;height:36px}.statusbar{height:30px;font-size:9px}.msg-banner{height:80px}.qrbox{width:110px}.appnav{height:37px;font-size:7px}.screen-step:nth-child(4),.screen-step:nth-child(5){margin-top:10px}.insight-band{grid-template-columns:1fr;gap:14px}.budget-wrap{padding:25px}.flow-head{padding:25px 24px 0}.flow-problem,.flow-caption{padding-left:24px;padding-right:24px}}
+@media(max-width:600px){.header-row{min-height:68px;gap:10px}.brand-lockup img{width:64px;height:51px}.brand-lockup span{display:none}.header-tools .btn{font-size:10px;padding:8px 12px}.hero{padding-top:42px}.hero-badge{font-size:10px}.hero h1{font-size:39px;margin-top:19px}.hero-copy{font-size:14px}.hero-path{margin-top:30px;padding:16px 5px;gap:13px 0}.path-item{font-size:10px;padding:1px 9px}.path-item b{font-size:9px}.overview{padding-top:38px}.overview h2{font-size:25px}.overview-grid{grid-template-columns:1fr}.insight-link{padding:15px 18px}.section-head{padding-top:24px}.section-head h2{font-size:29px}.insight-band{padding:17px}.insight-band strong{font-size:15px}.flow{border-radius:19px;margin-top:25px}.flow-head{display:block;padding:22px 18px 0}.flow-number{display:inline-block;margin-bottom:10px}.flow h3{font-size:23px}.flow-problem{padding:12px 18px 0;font-size:13px}.flow-caption{padding:12px 18px 0;font-size:10px}.screens{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px;padding:20px 16px}.screen-step:nth-child(4),.screen-step:nth-child(5){margin-top:0}.screen-step:last-child{grid-column:1/-1;width:calc(50% - 7px);justify-self:center}.phone{border-radius:25px}.phone-glass{border-radius:20px}.statusbar{height:26px;font-size:7px;padding:4px 9px 0}.island{height:11px;top:6px}.appbar{height:28px;font-size:8px;padding:0 7px}.appbody{padding:8px;gap:5px!important}.app-title{font-size:11px}.app-detail{font-size:8px}.appcard{padding:7px;font-size:8px;border-radius:9px}.appcard h4{font-size:9px}.appcard strong{font-size:14px}.appbadge{font-size:6px;padding:2px 5px}.appsmall{font-size:6px}.art{height:55px}.art.large{height:82px}.bottle{height:36px;width:22px;margin:4px}.bottle.tall{height:46px;width:23px}.bottle:before{width:14px;left:4px}.bottle:after{font-size:5px;inset:12px 3px 8px;line-height:12px}.box{height:39px;width:30px;font-size:6px}.product-grid{gap:5px}.product-grid .art{height:45px}.product-grid p{font-size:6px}.product-grid b{font-size:7px}.app-row,.field,.choice,.bubble{font-size:7px;padding:6px}.app-btn{font-size:8px;padding:7px 3px}.app-actions{padding:0 8px 7px}.appnav{height:28px;font-size:5px}.appnav i{font-size:10px}.avatar{height:29px;width:29px;font-size:9px}.avatar-row{gap:6px}.msg-banner{height:53px;font-size:13px}.msg-link{font-size:7px;margin-top:5px;padding-top:5px}.voucher-ticket{padding:8px}.voucher-ticket strong{font-size:17px}.qrbox{width:80px;padding:7px}.check{font-size:6px}.timeline-item{font-size:7px;padding-bottom:9px}.success-mark{height:43px;width:43px;font-size:22px;margin:2px auto}.mini-chart{height:45px}.step-label span{font-size:10px}.step-desc{font-size:9px}.outcomes{grid-template-columns:1fr;gap:15px;padding:18px}.outcomes p{font-size:12px}.condition{padding:12px 18px;font-size:10px}.budget{padding-top:65px}.budget-wrap{padding:21px 16px}.budget h2{font-size:29px}.pricing-table th,.pricing-table td{padding:11px 5px;font-size:10px}.pricing-table small{font-size:9px}.pricing-table th:nth-last-child(-n+2){max-width:65px}.price-summary{grid-template-columns:1fr}.price-box .sum-value{font-size:26px}.closing{padding:45px 20px}.viewer-stage{width:min(270px,65vw)}.viewer-stage .phone .appbody{gap:9px!important;padding:12px}.viewer-stage .bottle{height:48px;width:29px}.viewer-stage .bottle.tall{height:61px;width:30px}.viewer-stage .box{height:53px;width:41px}.viewer-stage .avatar{width:38px;height:38px}.viewer-stage .product-grid b{font-size:12px}.viewer-stage .appnav i{font-size:15px}.viewer-stage .voucher-ticket strong{font-size:26px}.viewer-stage .success-mark{height:60px;width:60px;font-size:30px}.viewer-stage .appsmall{font-size:10px}.viewer-stage .app-actions{padding:0 12px 10px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media print{.header-tools,.config-panel,.back-top,.hero-actions,.viewer,.zoom-label,.closing .btn{display:none!important}.header{position:static}.hero{padding:30px 0}.content-section{padding-top:35px}.screens{grid-template-columns:repeat(5,minmax(0,1fr))}.screen-step:last-child{grid-column:auto;width:auto}.flow{break-inside:avoid;box-shadow:none}.phone{print-color-adjust:exact;-webkit-print-color-adjust:exact}.condition{font-size:10px}.section-head h2{font-size:29px}.outcomes{grid-template-columns:1fr 1fr}.budget{padding:40px 0}a{color:inherit}body{font-size:12px}.hero h1{font-size:44px}}
+</style>
+</head>
+<body>
+<!-- HEADER -->
+<header class="header"><div class="container header-row"><a href="#top" class="brand-lockup" aria-label="Về đầu proposal"><img class="brand-logo" alt="CNVCDP"><span>GIẢI PHÁP CHO<br>NGÀNH BÁN LẺ</span></a><nav class="mainnav" aria-label="Điều hướng"><a href="#nhu-cau">Nhu cầu</a><a href="#quay-lai">Hành trình khách hàng</a><a href="#ngan-sach">Ngân sách</a><a href="#lien-he">Liên hệ</a></nav><div class="header-tools"><button class="btn" id="config-open" aria-controls="config-panel" aria-expanded="false">⚙ Tùy chỉnh mẫu</button><a class="btn primary" href="#nhu-cau">Khám phá giải pháp ↗</a></div></div></header>
+<main id="top">
+<!-- HERO: NỀN ĐỒ HỌA CSS TRỰC TIẾP PHÍA SAU TIÊU ĐỀ -->
+<section class="hero"><div class="container"><div class="hero-badge"><span class="pill">CNV CDP</span> PROPOSAL GIẢI PHÁP • NGÀNH BÁN LẺ</div><h1>Biến mỗi kết nối thành<br><span class="gradient">cơ hội khách quay lại</span></h1><p class="hero-copy">Kết nối dữ liệu, phát triển thành viên và chăm sóc đúng nhu cầu.<br>Minh họa giải pháp cho <strong class="customer-name">thương hiệu bán lẻ của bạn</strong> qua những hành trình cụ thể trên Mini App.</p><div class="hero-actions"><a class="btn primary" href="#nhu-cau">Khám phá các hành trình →</a><a class="btn" href="#ngan-sach">Xem phạm vi đầu tư</a></div><p class="hero-note"><span id="hero-count">6 nhu cầu · 18 luồng · 90 màn hình</span> &nbsp; / &nbsp; Bản mẫu minh họa V1</p><div class="hero-path" id="hero-path"></div></div></section>
+<section class="overview container" id="nhu-cau"><div class="overview-top"><div><p class="eyebrow">Bắt đầu từ nhu cầu thực tế</p><h2>Doanh nghiệp đang cần<br>giải quyết điều gì?</h2></div><p>Chọn một vấn đề để xem giải pháp, từng bước trải nghiệm và giá trị dành cho người mua lẫn doanh nghiệp.</p></div><div class="overview-grid" id="overview-grid"></div><p class="overview-hint">Các giao diện, dữ liệu và mức ưu đãi bên dưới là ví dụ minh họa, không phải ảnh chụp sản phẩm hay cam kết kết quả. Phạm vi triển khai cần được xác nhận theo gói và hệ thống thực tế.</p></section>
+<div id="sections"></div>
+<!-- PRICING: GIÁ ĐỂ NULL KHI CHƯA CÓ BÁO GIÁ ĐƯỢC XÁC NHẬN -->
+<section class="budget container" id="ngan-sach"><div class="budget-wrap"><p class="eyebrow">Ngân sách đầu tư</p><h2>Chọn phạm vi phù hợp.<br><span class="gradient">Xây lộ trình theo nhu cầu.</span></h2><p class="budget-intro">Danh mục dưới đây là phạm vi tham khảo. Báo giá chính thức được xác định sau khi thống nhất số lượng khách hàng, kênh sử dụng, tích hợp và yêu cầu vận hành.</p><table class="pricing-table"><thead><tr><th>Chọn</th><th>Hạng mục giải pháp</th><th>Năm đầu</th><th>Gia hạn/năm</th></tr></thead><tbody id="price-rows"></tbody></table><div class="price-summary"><div class="price-box main"><p class="sum-label">Tổng đầu tư năm đầu</p><p class="sum-value" id="first-total">Chờ báo giá</p><small id="price-selection">Đang chọn 0 hạng mục</small></div><div class="price-box"><p class="sum-label">Dự kiến gia hạn hằng năm</p><p class="sum-value" id="renew-total">Chờ báo giá</p><small>Tính theo hạng mục đã chọn và chính sách được xác nhận.</small></div></div><p class="pricing-note">Chi phí tin nhắn, giao dịch, bên thứ ba, phát triển riêng, thuế và điều kiện triển khai được làm rõ trong báo giá. Chưa có dữ liệu giá hoặc quà tặng được xác nhận trong bản mẫu này.</p></div></section>
+<section class="closing"><p class="eyebrow">Bước tiếp theo</p><h2>Cùng chọn hành trình phù hợp<br>với thương hiệu của bạn.</h2><p>Trao đổi hiện trạng, ưu tiên nhu cầu và thống nhất các luồng cần triển khai để hoàn thiện phạm vi giải pháp cùng ngân sách.</p><a class="btn primary" href="tel:0943452098">Trao đổi cùng Nguyễn Phi →</a></section>
+</main>
+<footer class="footer" id="lien-he"><img id="cnv-footer-logo" alt="CNVCDP – Your partner in growth"><strong>CONSULTANT — NGUYỄN PHI</strong><a href="tel:0943452098">094.3452.098</a><p class="thanks">TRÂN TRỌNG CẢM ƠN QUÝ KHÁCH.</p><small>CNVCDP · Proposal mẫu ngành bán lẻ · V1<br>Giao diện mô phỏng phục vụ trao đổi giải pháp.</small></footer>
+<a class="back-top" href="#top" aria-label="Về đầu trang">↑</a>
+<!-- CONFIG PANEL: CHỈ XUẤT BẢN CẤU HÌNH KHI NHẤN TẢI BẢN HTML -->
+<aside class="config-panel" id="config-panel" aria-label="Cấu hình proposal" hidden><div class="panel-heading"><h2>Tùy chỉnh proposal</h2><button class="close-btn" id="config-close" aria-label="Đóng cấu hình">×</button></div><p>Chọn luồng cần trình bày, đổi nhận diện rồi tải bản HTML riêng cho khách. Phần chân trang vẫn giữ thông tin đơn vị tư vấn CNVCDP.</p><label class="field-label" for="brand-name">Tên khách hàng / thương hiệu</label><input id="brand-name" type="text" maxlength="80"><label class="field-label" for="app-name">Tên hiển thị trong Mini App</label><input id="app-name" type="text" maxlength="35"><label class="field-label" for="brand-color">Màu chính</label><div class="color-row"><input id="brand-color" type="color"><span class="muted" style="font-size:11px">Áp dụng cho điểm nhấn và màn hình</span></div><label class="field-label" for="brand-upload">Logo khách hàng (PNG, JPG, WebP hoặc SVG)</label><input id="brand-upload" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"><p id="config-count"></p><div id="flow-config"></div><div class="panel-actions"><button class="btn primary" id="download-html">Tải bản HTML đã chọn ↓</button><button class="btn" id="reset-config">Khôi phục mẫu gốc</button></div><div class="config-feedback" id="config-feedback" role="status"></div></aside>
+<dialog class="viewer" id="viewer" aria-labelledby="viewer-title"><div class="viewer-shell"><div class="viewer-head"><p id="viewer-title"></p><button class="close-btn" id="viewer-close" aria-label="Đóng ảnh phóng lớn">×</button></div><div class="viewer-stage" id="viewer-stage"></div><div class="viewer-controls"><button class="btn" id="viewer-prev">← Trước</button><span id="viewer-count"></span><button class="btn" id="viewer-next">Sau →</button></div></div></dialog>
+<!-- ======================================================
+     DATA: THAY NỘI DUNG TRONG PROPOSAL_DATA / CONFIG
+     Mỗi steps[] có 5 màn hình; view được tạo từ kind.
+     ====================================================== -->
+<script id="proposal-data" type="application/json">[
+  {
+    "id": "quay-lai",
+    "short": "Mua lại",
+    "title": "TĂNG TỶ LỆ KHÁCH HÀNG QUAY LẠI",
+    "pain": "Khách mua một lần rồi không quay lại.",
+    "intro": "Tạo lý do để khách trở thành thành viên, tích lũy quyền lợi và tiếp tục lựa chọn thương hiệu.",
+    "tags": [
+      "Thành viên",
+      "Tích điểm & lên hạng",
+      "Ưu đãi",
+      "Chăm sóc tự động"
+    ],
+    "flows": [
+      {
+        "title": "Từ đơn đầu tiên đến thành viên của thương hiệu",
+        "problem": "Thông tin của người mua lần đầu chưa được gắn với quyền lợi đủ rõ để họ muốn giữ kết nối.",
+        "buyer": "Có tài khoản thành viên, ưu đãi chào mừng và nơi theo dõi quyền lợi.",
+        "business": "Hình thành kết nối trực tiếp với thành viên mới để tiếp tục chăm sóc.",
+        "condition": "Quyền lợi minh họa; điều kiện phát hành và sử dụng do thương hiệu thiết lập.",
+        "steps": [
+          {
+            "title": "Khám phá thương hiệu",
+            "kind": "home",
+            "headline": "Mua sắm hôm nay, tích lũy cho ngày mai",
+            "detail": "Gia nhập cộng đồng thành viên để nhận quyền lợi riêng.",
+            "cta": "Khám phá thành viên"
+          },
+          {
+            "title": "Xem quyền lợi",
+            "kind": "member",
+            "headline": "Chào bạn, thành viên mới",
+            "detail": "Tích điểm mỗi đơn • Ưu đãi riêng • Quà sinh nhật",
+            "cta": "Đăng ký thành viên"
+          },
+          {
+            "title": "Xác nhận thông tin",
+            "kind": "form",
+            "headline": "Kết nối để nhận quyền lợi",
+            "detail": "Thông tin được dùng để quản lý thành viên và chăm sóc theo lựa chọn của bạn.",
+            "cta": "Hoàn tất đăng ký"
+          },
+          {
+            "title": "Nhận ưu đãi",
+            "kind": "voucher",
+            "headline": "Quà chào mừng 30.000đ",
+            "detail": "Đơn từ 300.000đ • Dùng trong 14 ngày • Mỗi thành viên 1 lần",
+            "cta": "Mua sắm ngay"
+          },
+          {
+            "title": "Đặt đơn đầu tiên",
+            "kind": "checkout",
+            "headline": "Ưu đãi đã được áp dụng",
+            "detail": "Giỏ hàng 350.000đ • Giảm 30.000đ • Phí giao hàng tính riêng",
+            "cta": "Đặt hàng · 320.000đ"
+          }
+        ]
+      },
+      {
+        "title": "Mỗi đơn hàng, một bước gần hơn tới hạng mới",
+        "problem": "Khách chưa thấy giá trị tích lũy khi tiếp tục mua tại cùng một thương hiệu.",
+        "buyer": "Theo dõi điểm và tiến độ lên hạng rõ ràng.",
+        "business": "Có cơ sở khuyến khích mua lại bằng quyền lợi thành viên.",
+        "condition": "Cần dữ liệu đơn hợp lệ, quy tắc tích điểm và quy tắc xử lý đơn hoàn/hủy.",
+        "steps": [
+          {
+            "title": "Hoàn tất đơn hàng",
+            "kind": "success",
+            "headline": "Cảm ơn bạn đã mua sắm",
+            "detail": "Đơn #CNV0128 đã hoàn tất • Giá trị 350.000đ",
+            "cta": "Xem điểm được cộng"
+          },
+          {
+            "title": "Ghi nhận điểm",
+            "kind": "points",
+            "headline": "Bạn vừa nhận 35 điểm",
+            "detail": "Điểm hiện có 480 • Đơn hợp lệ được cộng theo chính sách",
+            "cta": "Xem quyền lợi"
+          },
+          {
+            "title": "Xem tiến độ hạng",
+            "kind": "member",
+            "headline": "Còn 20 điểm để lên hạng Vàng",
+            "detail": "480 / 500 điểm xét hạng • Chính sách minh họa",
+            "cta": "Khám phá sản phẩm"
+          },
+          {
+            "title": "Tiếp tục mua sắm",
+            "kind": "catalog",
+            "headline": "Lựa chọn cho lần mua tiếp theo",
+            "detail": "Khám phá sản phẩm và tiếp tục tích lũy điểm hợp lệ.",
+            "cta": "Xem giỏ hàng"
+          },
+          {
+            "title": "Chào hạng mới",
+            "kind": "success",
+            "headline": "Chào mừng thành viên Vàng",
+            "detail": "Mở quyền lợi mới sau khi giao dịch đủ điều kiện được ghi nhận.",
+            "cta": "Xem quyền lợi hạng Vàng"
+          }
+        ]
+      },
+      {
+        "title": "Mời khách lâu chưa mua quay lại Mini App",
+        "problem": "Khách đã từng mua nhưng thương hiệu chưa có lời mời quay lại phù hợp.",
+        "buyer": "Nhận lời mời và ưu đãi với điều kiện sử dụng rõ ràng.",
+        "business": "Có hành trình kích hoạt lại khách cũ và đo phản hồi chiến dịch.",
+        "condition": "Cần lịch sử mua được liên kết, điều kiện nhận tin và mẫu tin được phép gửi.",
+        "steps": [
+          {
+            "title": "Nhận lời mời",
+            "kind": "message",
+            "headline": "Nguyễn Phi ơi, lâu rồi chưa gặp!",
+            "detail": "Mời bạn trở lại mua sắm với ưu đãi dành riêng cho thành viên.",
+            "cta": "Xem quà của bạn"
+          },
+          {
+            "title": "Mở ưu đãi",
+            "kind": "voucher",
+            "headline": "Ưu đãi trở lại 50.000đ",
+            "detail": "Đơn từ 500.000đ • Hạn dùng 7 ngày • Điều kiện minh họa",
+            "cta": "Lưu ưu đãi"
+          },
+          {
+            "title": "Xem sản phẩm phù hợp",
+            "kind": "catalog",
+            "headline": "Khám phá những lựa chọn mới",
+            "detail": "Danh mục sản phẩm được chọn cho chiến dịch quay lại.",
+            "cta": "Chọn sản phẩm"
+          },
+          {
+            "title": "Áp dụng khi mua",
+            "kind": "checkout",
+            "headline": "Ưu đãi trở lại đã sẵn sàng",
+            "detail": "Giỏ hàng 650.000đ • Giảm 50.000đ • Chưa gồm phí giao",
+            "cta": "Đặt hàng · 600.000đ"
+          },
+          {
+            "title": "Theo dõi đơn mới",
+            "kind": "order",
+            "headline": "Hẹn gặp lại bạn trong đơn này",
+            "detail": "Đơn #CNV0136 đã được tiếp nhận và chờ xác nhận.",
+            "cta": "Theo dõi đơn hàng"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "du-lieu",
+    "short": "Dữ liệu",
+    "title": "KẾT NỐI DỮ LIỆU KHÁCH HÀNG ĐA KÊNH",
+    "pain": "Dữ liệu khách hàng phân tán ở nhiều kênh.",
+    "intro": "Liên kết các điểm chạm với hồ sơ khách hàng, để thông tin và quyền lợi không đứt đoạn giữa các kênh.",
+    "tags": [
+      "Dữ liệu tập trung",
+      "Kết nối phần mềm bán hàng",
+      "Hồ sơ khách hàng"
+    ],
+    "flows": [
+      {
+        "title": "Từ điểm chạm đầu tiên đến hồ sơ thành viên",
+        "problem": "Khách đến từ nhiều nguồn nhưng nguồn đăng ký và thông tin liên hệ chưa được ghi nhận nhất quán.",
+        "buyer": "Đăng ký thuận tiện và biết thông tin của mình được sử dụng cho mục đích gì.",
+        "business": "Ghi nhận nguồn đăng ký và liên kết hồ sơ theo định danh đủ điều kiện.",
+        "condition": "Khả năng ghi nhận từng kênh và hợp nhất cần đối chiếu định danh, quyền dữ liệu và tích hợp.",
+        "steps": [
+          {
+            "title": "Gặp lời mời",
+            "kind": "social",
+            "headline": "Một nơi cho mọi quyền lợi",
+            "detail": "Từ nội dung giới thiệu, mở trang đăng ký thành viên của thương hiệu.",
+            "cta": "Khám phá ngay"
+          },
+          {
+            "title": "Đăng ký từ điểm chạm",
+            "kind": "form",
+            "headline": "Kết nối với thương hiệu",
+            "detail": "Nguồn chiến dịch: Bài đăng giới thiệu • Thông tin minh họa",
+            "cta": "Tiếp tục"
+          },
+          {
+            "title": "Xác nhận quyền dữ liệu",
+            "kind": "consent",
+            "headline": "Bạn chủ động chọn kết nối",
+            "detail": "Đọc mục đích sử dụng dữ liệu và chọn quyền liên hệ mong muốn.",
+            "cta": "Xác nhận lựa chọn"
+          },
+          {
+            "title": "Kiểm tra thông tin",
+            "kind": "profile",
+            "headline": "Nguyễn Phi",
+            "detail": "Số điện thoại đã xác nhận • Hồ sơ thành viên đã liên kết",
+            "cta": "Xem tài khoản"
+          },
+          {
+            "title": "Trải nghiệm liên tục",
+            "kind": "home",
+            "headline": "Chào mừng bạn trở lại",
+            "detail": "Điểm, ưu đãi và đơn hàng đã liên kết được hiển thị tại đây.",
+            "cta": "Khám phá quyền lợi"
+          }
+        ]
+      },
+      {
+        "title": "Đơn tại cửa hàng, quyền lợi trên Mini App",
+        "problem": "Giao dịch tại cửa hàng chưa gắn với tài khoản trực tuyến, khiến điểm và lịch sử mua thiếu liên tục.",
+        "buyer": "Xem đơn và quyền lợi từ giao dịch đã được liên kết.",
+        "business": "Kết nối giao dịch với hồ sơ để chăm sóc nhất quán.",
+        "condition": "Cần tích hợp phần mềm bán hàng, đối chiếu khách và thống nhất trạng thái đơn/điểm.",
+        "steps": [
+          {
+            "title": "Mở thẻ thành viên",
+            "kind": "member",
+            "headline": "Thẻ thành viên Nguyễn Phi",
+            "detail": "Xuất trình mã tại quầy để nhân viên xác định tài khoản.",
+            "cta": "Hiển thị mã"
+          },
+          {
+            "title": "Xác nhận tại quầy",
+            "kind": "qr",
+            "headline": "Mã thành viên của bạn",
+            "detail": "Nhân viên quét mã và gắn giao dịch với tài khoản phù hợp.",
+            "cta": "Đã xuất trình mã"
+          },
+          {
+            "title": "Nhận thông báo đơn",
+            "kind": "message",
+            "headline": "Đơn tại cửa hàng đã được ghi nhận",
+            "detail": "Đơn #POS0281 • 350.000đ • Chờ đồng bộ theo kết nối",
+            "cta": "Xem chi tiết đơn"
+          },
+          {
+            "title": "Xem lịch sử mua",
+            "kind": "order",
+            "headline": "Mọi đơn đã liên kết, cùng một nơi",
+            "detail": "Đơn tại cửa hàng và Mini App được phân biệt theo nguồn.",
+            "cta": "Xem đơn #POS0281"
+          },
+          {
+            "title": "Kiểm tra điểm",
+            "kind": "points",
+            "headline": "Quyền lợi được cập nhật",
+            "detail": "Điểm cộng sau khi đơn đáp ứng điều kiện • Có đối soát đơn hoàn",
+            "cta": "Xem lịch sử điểm"
+          }
+        ]
+      },
+      {
+        "title": "Một tài khoản, đầy đủ thông tin đã liên kết",
+        "problem": "Người mua khó theo dõi điểm, hạng, ưu đãi và đơn khi thông tin nằm ở nhiều nơi.",
+        "buyer": "Tự tra cứu các thông tin thành viên đã được cập nhật.",
+        "business": "Giảm nhu cầu tra cứu thủ công và tăng tính nhất quán trong phục vụ.",
+        "condition": "Chỉ hiển thị dữ liệu được phép cung cấp và đã liên kết; không mặc định đồng bộ mọi nguồn.",
+        "steps": [
+          {
+            "title": "Vào tài khoản",
+            "kind": "profile",
+            "headline": "Xin chào, Nguyễn Phi",
+            "detail": "Thành viên Vàng • Thông tin minh họa",
+            "cta": "Xem tổng quan"
+          },
+          {
+            "title": "Xem điểm thành viên",
+            "kind": "points",
+            "headline": "520 điểm đang khả dụng",
+            "detail": "Lịch sử cộng, sử dụng và thời hạn điểm theo chính sách.",
+            "cta": "Lịch sử điểm"
+          },
+          {
+            "title": "Xem quyền lợi hạng",
+            "kind": "member",
+            "headline": "Quyền lợi hạng Vàng",
+            "detail": "Ưu đãi riêng • Quà sinh nhật • Quyền lợi theo chương trình",
+            "cta": "Xem chính sách hạng"
+          },
+          {
+            "title": "Mở ví ưu đãi",
+            "kind": "voucher",
+            "headline": "3 ưu đãi đang khả dụng",
+            "detail": "Theo dõi hạn sử dụng và điều kiện của từng ưu đãi.",
+            "cta": "Xem ưu đãi"
+          },
+          {
+            "title": "Tra cứu đơn",
+            "kind": "order",
+            "headline": "Lịch sử mua hàng",
+            "detail": "Theo dõi đơn đã liên kết và trạng thái xử lý tương ứng.",
+            "cta": "Xem chi tiết đơn"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ca-nhan-hoa",
+    "short": "Cá nhân hóa",
+    "title": "ƯU ĐÃI ĐÚNG KHÁCH, ĐÚNG NHU CẦU",
+    "pain": "Phải giảm giá liên tục để kích cầu.",
+    "intro": "Thiết kế quyền lợi theo từng nhóm khách, với điều kiện áp dụng rõ ràng và giá trị phù hợp.",
+    "tags": [
+      "Phân nhóm",
+      "Ưu đãi theo điều kiện",
+      "Nội dung phù hợp"
+    ],
+    "flows": [
+      {
+        "title": "Ưu đãi theo nhóm mua hàng",
+        "problem": "Một ưu đãi chung không phản ánh sự khác nhau về nhu cầu và lịch sử mua của từng nhóm khách.",
+        "buyer": "Nhận ưu đãi liên quan tới nhóm sản phẩm thường quan tâm.",
+        "business": "Chọn đúng nhóm nhận và giới hạn điều kiện sử dụng của chiến dịch.",
+        "condition": "Cần dữ liệu nhóm khách, quy tắc phát hành và khả năng áp dụng ưu đãi tại kênh bán.",
+        "steps": [
+          {
+            "title": "Nhận gợi ý",
+            "kind": "message",
+            "headline": "Một lựa chọn hợp gu bạn",
+            "detail": "Khám phá bộ sản phẩm được chọn cho nhóm khách trong chiến dịch.",
+            "cta": "Xem gợi ý"
+          },
+          {
+            "title": "Khám phá bộ sản phẩm",
+            "kind": "catalog",
+            "headline": "Bộ chăm sóc hằng ngày",
+            "detail": "Các sản phẩm bổ sung cho nhau, thông tin và giá hiển thị rõ ràng.",
+            "cta": "Xem bộ sản phẩm"
+          },
+          {
+            "title": "Xem quyền lợi riêng",
+            "kind": "voucher",
+            "headline": "Ưu đãi cho nhóm thành viên",
+            "detail": "Giảm 10% tối đa 40.000đ • Đơn từ 400.000đ • Sản phẩm áp dụng",
+            "cta": "Chọn ưu đãi"
+          },
+          {
+            "title": "Kiểm tra điều kiện",
+            "kind": "checkout",
+            "headline": "Ưu đãi phù hợp với giỏ hàng",
+            "detail": "Giỏ 450.000đ • Giảm 40.000đ theo mức tối đa • Chưa gồm phí giao",
+            "cta": "Đặt hàng · 410.000đ"
+          },
+          {
+            "title": "Xác nhận đơn",
+            "kind": "success",
+            "headline": "Đã nhận đơn của bạn",
+            "detail": "Quyền lợi được gắn với giao dịch để đối chiếu khi cần.",
+            "cta": "Xem đơn hàng"
+          }
+        ]
+      },
+      {
+        "title": "Tiến độ lên hạng tạo động lực mua lại",
+        "problem": "Khách gần đạt hạng mới nhưng chưa biết mình còn thiếu bao nhiêu và được thêm quyền lợi gì.",
+        "buyer": "Biết tiến độ và tự quyết định có tiếp tục mua để tích lũy hay không.",
+        "business": "Tạo động lực bằng quyền lợi hạng thay vì chỉ giảm giá đơn hàng.",
+        "condition": "Quy tắc hạng, kỳ xét hạng và giao dịch hợp lệ cần được thống nhất.",
+        "steps": [
+          {
+            "title": "Nhận thông báo tiến độ",
+            "kind": "message",
+            "headline": "Bạn đang rất gần hạng Vàng",
+            "detail": "Hiện có 480 / 500 điểm xét hạng trong kỳ minh họa.",
+            "cta": "Xem tiến độ"
+          },
+          {
+            "title": "Xem phần còn thiếu",
+            "kind": "points",
+            "headline": "Còn 20 điểm xét hạng",
+            "detail": "Điểm xét hạng được cập nhật từ giao dịch đủ điều kiện.",
+            "cta": "Xem quyền lợi sắp mở"
+          },
+          {
+            "title": "Khám phá quyền lợi",
+            "kind": "member",
+            "headline": "Điều gì chờ bạn ở hạng Vàng?",
+            "detail": "Quà sinh nhật • Ưu đãi thành viên • Quyền lợi theo chính sách",
+            "cta": "Mua sắm khi có nhu cầu"
+          },
+          {
+            "title": "Chọn sản phẩm",
+            "kind": "catalog",
+            "headline": "Mua thứ bạn cần, tích lũy thêm",
+            "detail": "Điểm dự kiến là tham khảo và sẽ được xác nhận theo đơn.",
+            "cta": "Xem giỏ hàng"
+          },
+          {
+            "title": "Mở hạng mới",
+            "kind": "success",
+            "headline": "Hạng Vàng đã được kích hoạt",
+            "detail": "Áp dụng sau khi giao dịch được xác nhận đủ điều kiện.",
+            "cta": "Khám phá quyền lợi"
+          }
+        ]
+      },
+      {
+        "title": "Nội dung phù hợp trước lời mời mua hàng",
+        "problem": "Khách nhận nhiều thông điệp giảm giá nhưng thiếu nội dung giúp lựa chọn sản phẩm phù hợp.",
+        "buyer": "Đọc nội dung hữu ích và chọn sản phẩm theo nhu cầu.",
+        "business": "Phân phối nội dung theo nhóm quan tâm và theo dõi tương tác được hỗ trợ.",
+        "condition": "Nội dung và gợi ý phải được thương hiệu kiểm duyệt; không mặc định do AI tạo tự động.",
+        "steps": [
+          {
+            "title": "Chọn mối quan tâm",
+            "kind": "survey",
+            "headline": "Bạn đang quan tâm điều gì?",
+            "detail": "Chăm sóc cá nhân • Gia đình • Sống tiện nghi",
+            "cta": "Lưu lựa chọn"
+          },
+          {
+            "title": "Nhận bài viết",
+            "kind": "message",
+            "headline": "Một gợi ý hữu ích dành cho bạn",
+            "detail": "Khám phá cách xây dựng thói quen chăm sóc hằng ngày.",
+            "cta": "Đọc nội dung"
+          },
+          {
+            "title": "Đọc hướng dẫn",
+            "kind": "article",
+            "headline": "Chọn theo nhu cầu thực tế",
+            "detail": "Hiểu công dụng, cách sử dụng và lưu ý trước khi chọn mua.",
+            "cta": "Xem sản phẩm liên quan"
+          },
+          {
+            "title": "Xem gợi ý liên quan",
+            "kind": "catalog",
+            "headline": "Sản phẩm trong bài viết",
+            "detail": "Danh mục được biên tập phù hợp với chủ đề khách đã chọn.",
+            "cta": "Xem chi tiết"
+          },
+          {
+            "title": "Lưu hoặc mua khi cần",
+            "kind": "product",
+            "headline": "Bộ chăm sóc hằng ngày",
+            "detail": "Thông tin rõ ràng • Giá 350.000đ • Chính sách theo cửa hàng",
+            "cta": "Thêm vào giỏ"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "thau-hieu",
+    "short": "Thấu hiểu",
+    "title": "HIỂU KHÁCH HÀNG ĐỂ PHỤC VỤ TỐT HƠN",
+    "pain": "Không hiểu rõ khách hàng của mình.",
+    "intro": "Kết hợp thông tin khách chủ động cung cấp với lịch sử mua và tương tác được phép ghi nhận.",
+    "tags": [
+      "Khảo sát nhu cầu",
+      "Hồ sơ toàn diện",
+      "Phân nhóm RFM"
+    ],
+    "flows": [
+      {
+        "title": "Khảo sát ngắn, hiểu nhu cầu rõ hơn",
+        "problem": "Chỉ có số điện thoại và đơn hàng thì chưa đủ hiểu sở thích hoặc nhu cầu của người mua.",
+        "buyer": "Chủ động chia sẻ mối quan tâm để nhận nội dung phù hợp hơn.",
+        "business": "Bổ sung dữ liệu sở thích có nguồn gốc và thời điểm ghi nhận.",
+        "condition": "Chỉ hỏi thông tin cần thiết, có giải thích mục đích và cơ chế điều chỉnh lựa chọn.",
+        "steps": [
+          {
+            "title": "Mời chia sẻ nhu cầu",
+            "kind": "home",
+            "headline": "Để chúng tôi hiểu bạn hơn",
+            "detail": "Khảo sát ngắn giúp thương hiệu chọn nội dung phù hợp.",
+            "cta": "Bắt đầu khảo sát"
+          },
+          {
+            "title": "Chọn nhóm quan tâm",
+            "kind": "survey",
+            "headline": "Bạn thích khám phá nhóm nào?",
+            "detail": "Chăm sóc cá nhân • Gia đình • Sống tiện nghi",
+            "cta": "Tiếp tục"
+          },
+          {
+            "title": "Chọn nhu cầu ưu tiên",
+            "kind": "survey",
+            "headline": "Điều gì quan trọng với bạn?",
+            "detail": "Chất lượng • Tiện lợi • Giá phù hợp • Quyền lợi thành viên",
+            "cta": "Lưu câu trả lời"
+          },
+          {
+            "title": "Kiểm tra lựa chọn",
+            "kind": "profile",
+            "headline": "Sở thích của bạn đã được lưu",
+            "detail": "Bạn có thể cập nhật lại lựa chọn khi nhu cầu thay đổi.",
+            "cta": "Chỉnh sửa sở thích"
+          },
+          {
+            "title": "Khám phá nội dung phù hợp",
+            "kind": "catalog",
+            "headline": "Dành cho mối quan tâm của bạn",
+            "detail": "Nội dung và danh mục được chọn theo thông tin đã cung cấp.",
+            "cta": "Khám phá ngay"
+          }
+        ]
+      },
+      {
+        "title": "Từ lịch sử tương tác đến tư vấn có ngữ cảnh",
+        "problem": "Nhân viên phải hỏi lại nhiều thông tin vì chưa thấy được bối cảnh khách đã mua và đã trao đổi.",
+        "buyer": "Được tư vấn tiếp nối bối cảnh, có thể kiểm tra lại nhu cầu trước khi mua.",
+        "business": "Nhân viên có hồ sơ và lịch sử đã được liên kết để hỗ trợ tư vấn.",
+        "condition": "Màn 2–4 là mô phỏng góc nhìn nhân viên trên thiết bị di động; cần phân quyền và kiểm tra giao diện thực tế.",
+        "steps": [
+          {
+            "title": "Khách gửi yêu cầu",
+            "kind": "chat",
+            "headline": "Tôi muốn mua bổ sung sản phẩm",
+            "detail": "Khách trao đổi với thương hiệu từ điểm liên hệ được hỗ trợ.",
+            "cta": "Gửi yêu cầu"
+          },
+          {
+            "title": "Nhận diện hồ sơ",
+            "kind": "profile",
+            "headline": "Hồ sơ Nguyễn Phi",
+            "detail": "GÓC NHÌN NHÂN VIÊN • Thành viên Vàng • Khách đã liên kết",
+            "cta": "Xem lịch sử"
+          },
+          {
+            "title": "Xem đơn gần nhất",
+            "kind": "order",
+            "headline": "Lần mua gần nhất: 12/10",
+            "detail": "GÓC NHÌN NHÂN VIÊN • Bộ chăm sóc hằng ngày • 350.000đ",
+            "cta": "Xem tương tác"
+          },
+          {
+            "title": "Xem mối quan tâm",
+            "kind": "timeline",
+            "headline": "Bối cảnh phục vụ khách",
+            "detail": "GÓC NHÌN NHÂN VIÊN • Quan tâm gia đình • Đã hỏi về sử dụng",
+            "cta": "Tiếp tục tư vấn"
+          },
+          {
+            "title": "Nhận tư vấn phù hợp",
+            "kind": "chat",
+            "headline": "Mình xác nhận lại nhu cầu của bạn nhé",
+            "detail": "Nhân viên kiểm tra nhu cầu hiện tại trước khi giới thiệu lựa chọn.",
+            "cta": "Xem sản phẩm được tư vấn"
+          }
+        ]
+      },
+      {
+        "title": "Chăm sóc theo mức độ gắn bó của khách",
+        "problem": "Khách mới, khách mua đều và khách có dấu hiệu rời bỏ đang nhận cùng một cách chăm sóc.",
+        "buyer": "Nhận lời mời phù hợp hơn với mức độ gắn bó.",
+        "business": "Dùng phân nhóm RFM để chọn hành trình cho từng nhóm khách.",
+        "condition": "Màn 1–2 là mô phỏng quản trị trên di động; ngưỡng RFM và chu kỳ phân tích cần cấu hình.",
+        "steps": [
+          {
+            "title": "Xem phân nhóm khách",
+            "kind": "segments",
+            "headline": "Khách có mức độ gắn bó khác nhau",
+            "detail": "GÓC NHÌN NHÂN VIÊN • R: Lần mua gần nhất • F: Tần suất • M: Giá trị",
+            "cta": "Xem nhóm cần chăm sóc"
+          },
+          {
+            "title": "Chọn nhóm chiến dịch",
+            "kind": "segments",
+            "headline": "Nhóm có dấu hiệu lâu chưa mua",
+            "detail": "GÓC NHÌN NHÂN VIÊN • Chọn theo ngưỡng và chu kỳ của doanh nghiệp",
+            "cta": "Chọn hành trình phù hợp"
+          },
+          {
+            "title": "Khách nhận lời mời",
+            "kind": "message",
+            "headline": "Có điều mới dành cho bạn",
+            "detail": "Khám phá bộ sản phẩm và quyền lợi trong chương trình trở lại.",
+            "cta": "Xem chương trình"
+          },
+          {
+            "title": "Xem quyền lợi phù hợp",
+            "kind": "voucher",
+            "headline": "Quyền lợi trong chiến dịch",
+            "detail": "Điều kiện theo từng nhóm khách và chương trình đã thiết lập.",
+            "cta": "Khám phá sản phẩm"
+          },
+          {
+            "title": "Ghi nhận phản hồi",
+            "kind": "success",
+            "headline": "Cảm ơn bạn đã quay lại",
+            "detail": "Tương tác và giao dịch đủ điều kiện bổ sung vào hồ sơ.",
+            "cta": "Tiếp tục mua sắm"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "kenh-truc-tiep",
+    "short": "Kênh trực tiếp",
+    "title": "PHÁT TRIỂN KÊNH TƯƠNG TÁC TRỰC TIẾP",
+    "pain": "Phụ thuộc quảng cáo để có doanh thu.",
+    "intro": "Tận dụng các điểm chạm sẵn có để xây kết nối thành viên và tạo thêm cơ hội quay lại mua sắm.",
+    "tags": [
+      "Mã QR",
+      "Zalo OA",
+      "Zalo Mini App",
+      "Giới thiệu bạn bè"
+    ],
+    "flows": [
+      {
+        "title": "Từ mã QR trên gói hàng đến thành viên",
+        "problem": "Đơn hàng đã giao nhưng chưa tạo ra điểm kết nối để thương hiệu tiếp tục phục vụ người mua.",
+        "buyer": "Mở Mini App và đăng ký nhận quyền lợi ngay từ gói hàng.",
+        "business": "Ghi nhận nguồn thành viên từ điểm chạm QR nếu đã cấu hình.",
+        "condition": "Luồng thực tế cần thống nhất thứ tự biểu mẫu, OA, cấp quyền và Mini App với cấu hình đang dùng.",
+        "steps": [
+          {
+            "title": "Quét mã trên gói hàng",
+            "kind": "qr",
+            "headline": "Quét để khám phá quyền lợi",
+            "detail": "Thẻ cảm ơn đi kèm đơn hàng dẫn tới điểm đăng ký của thương hiệu.",
+            "cta": "Mở trang đăng ký"
+          },
+          {
+            "title": "Điền thông tin",
+            "kind": "form",
+            "headline": "Nhận quyền lợi thành viên",
+            "detail": "Nhập thông tin cần thiết và đọc mục đích sử dụng dữ liệu.",
+            "cta": "Gửi đăng ký"
+          },
+          {
+            "title": "Kết nối Zalo OA",
+            "kind": "oa",
+            "headline": "Theo dõi tin từ thương hiệu",
+            "detail": "Chọn quan tâm OA để giữ kết nối theo điều kiện nền tảng.",
+            "cta": "Quan tâm OA"
+          },
+          {
+            "title": "Xác nhận quyền thông tin",
+            "kind": "consent",
+            "headline": "Hoàn tất kết nối tài khoản",
+            "detail": "Bạn xem và quyết định quyền truy cập thông tin được đề nghị.",
+            "cta": "Xác nhận và tiếp tục"
+          },
+          {
+            "title": "Vào Mini App",
+            "kind": "home",
+            "headline": "Chào mừng thành viên mới",
+            "detail": "Xem sản phẩm, điểm và quyền lợi tại kênh chính chủ.",
+            "cta": "Khám phá Mini App"
+          }
+        ]
+      },
+      {
+        "title": "Từ Zalo OA đến lần mua tiếp theo",
+        "problem": "Thương hiệu đã có khách quan tâm nhưng thiếu đường dẫn liền mạch từ nội dung tới mua hàng.",
+        "buyer": "Mở nội dung và tiếp tục mua sắm trong cùng hành trình.",
+        "business": "Có điểm kết nối để triển khai các chiến dịch được phép gửi và đo lường.",
+        "condition": "Quyền gửi, đối tượng nhận, mẫu tin và phí theo kênh cần được xác nhận trước triển khai.",
+        "steps": [
+          {
+            "title": "Theo dõi OA",
+            "kind": "oa",
+            "headline": "Giữ kết nối với thương hiệu",
+            "detail": "Theo dõi nội dung, chương trình và cập nhật phù hợp.",
+            "cta": "Quan tâm"
+          },
+          {
+            "title": "Nhận nội dung mới",
+            "kind": "message",
+            "headline": "Bộ sưu tập mới đã có mặt",
+            "detail": "Mời bạn khám phá sản phẩm mới và quyền lợi thành viên.",
+            "cta": "Mở Mini App"
+          },
+          {
+            "title": "Xem trang chiến dịch",
+            "kind": "home",
+            "headline": "Khám phá lựa chọn mới",
+            "detail": "Trang đích của chiến dịch trên Mini App.",
+            "cta": "Xem bộ sưu tập"
+          },
+          {
+            "title": "Chọn sản phẩm",
+            "kind": "product",
+            "headline": "Bộ chăm sóc hằng ngày",
+            "detail": "Giá 350.000đ • Kiểm tra thông tin và chính sách trước mua",
+            "cta": "Thêm vào giỏ"
+          },
+          {
+            "title": "Đặt hàng",
+            "kind": "checkout",
+            "headline": "Hoàn tất lựa chọn của bạn",
+            "detail": "Tạm tính 350.000đ • Phí giao hàng theo địa chỉ",
+            "cta": "Tiếp tục đặt hàng"
+          }
+        ]
+      },
+      {
+        "title": "Thành viên giới thiệu thêm người mua mới",
+        "problem": "Khách hài lòng chưa có cơ chế thuận tiện để giới thiệu thương hiệu và theo dõi quyền lợi.",
+        "buyer": "Dễ chia sẻ lời mời và xem điều kiện nhận thưởng.",
+        "business": "Ghi nhận nguồn giới thiệu và đối soát thưởng theo sự kiện hợp lệ.",
+        "condition": "Cần mô-đun giới thiệu, quy tắc ghi nhận, chống tự giới thiệu và xử lý đơn hoàn/hủy.",
+        "steps": [
+          {
+            "title": "Mở chương trình giới thiệu",
+            "kind": "referral",
+            "headline": "Cùng bạn bè khám phá thương hiệu",
+            "detail": "Mời bạn mới và nhận quyền lợi khi đáp ứng điều kiện.",
+            "cta": "Xem chương trình"
+          },
+          {
+            "title": "Lấy liên kết cá nhân",
+            "kind": "referral",
+            "headline": "Mã giới thiệu PHI028",
+            "detail": "Chia sẻ liên kết riêng • Quyền lợi theo đơn hợp lệ",
+            "cta": "Chia sẻ lời mời"
+          },
+          {
+            "title": "Bạn mới mở lời mời",
+            "kind": "home",
+            "headline": "Bạn nhận được lời mời từ Nguyễn Phi",
+            "detail": "Xem thông tin thương hiệu và điều kiện chương trình.",
+            "cta": "Đăng ký và khám phá"
+          },
+          {
+            "title": "Phát sinh đơn hợp lệ",
+            "kind": "order",
+            "headline": "Đơn giới thiệu đang chờ đối soát",
+            "detail": "Quyền lợi chỉ xác nhận sau khi đáp ứng điều kiện chương trình.",
+            "cta": "Xem điều kiện"
+          },
+          {
+            "title": "Cập nhật quyền lợi",
+            "kind": "success",
+            "headline": "Lượt giới thiệu đã được xác nhận",
+            "detail": "Thành viên kiểm tra quyền lợi trong chương trình của mình.",
+            "cta": "Xem lịch sử giới thiệu"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tu-dong-hoa",
+    "short": "Tự động hóa",
+    "title": "TỰ ĐỘNG HÓA CHĂM SÓC KHÁCH HÀNG",
+    "pain": "Chăm sóc thủ công, dễ bỏ sót và khó mở rộng.",
+    "intro": "Thiết lập các điểm chăm sóc theo sự kiện và vòng đời, giúp nhân viên tập trung vào tình huống cần hỗ trợ trực tiếp.",
+    "tags": [
+      "Theo sự kiện",
+      "Theo vòng đời",
+      "Tin nhắn",
+      "Theo dõi phản hồi"
+    ],
+    "flows": [
+      {
+        "title": "Chào mừng ngay khi khách trở thành thành viên",
+        "problem": "Nhân viên không thể gửi lời chào và hướng dẫn quyền lợi kịp thời cho mọi thành viên mới.",
+        "buyer": "Nhận hướng dẫn rõ ràng sau khi đăng ký.",
+        "business": "Kích hoạt hành trình chào mừng theo sự kiện, có kiểm soát trùng lặp.",
+        "condition": "Cần sự kiện đăng ký thành công, định danh nhận tin và kênh gửi hợp lệ.",
+        "steps": [
+          {
+            "title": "Hoàn tất đăng ký",
+            "kind": "success",
+            "headline": "Bạn đã trở thành thành viên",
+            "detail": "Sự kiện đăng ký thành công được ghi nhận.",
+            "cta": "Mở tài khoản"
+          },
+          {
+            "title": "Nhận tin chào mừng",
+            "kind": "message",
+            "headline": "Chào mừng Nguyễn Phi!",
+            "detail": "Cảm ơn bạn đã kết nối. Khám phá quyền lợi dành cho thành viên mới.",
+            "cta": "Xem quyền lợi"
+          },
+          {
+            "title": "Đọc hướng dẫn",
+            "kind": "article",
+            "headline": "Bắt đầu với 3 thao tác đơn giản",
+            "detail": "Xem điểm • Lưu ưu đãi • Theo dõi đơn hàng",
+            "cta": "Mở tài khoản thành viên"
+          },
+          {
+            "title": "Lưu quà chào mừng",
+            "kind": "voucher",
+            "headline": "Ưu đãi đơn đầu 30.000đ",
+            "detail": "Đơn từ 300.000đ • Trong 14 ngày • Theo điều kiện chương trình",
+            "cta": "Khám phá sản phẩm"
+          },
+          {
+            "title": "Mua sắm trên Mini App",
+            "kind": "catalog",
+            "headline": "Chọn sản phẩm bạn cần",
+            "detail": "Quyền lợi được kiểm tra ở bước xác nhận đơn hàng.",
+            "cta": "Bắt đầu mua sắm"
+          }
+        ]
+      },
+      {
+        "title": "Cập nhật đơn hàng theo từng trạng thái",
+        "problem": "Khách phải hỏi tiến độ, nhân viên phải tra cứu và trả lời lặp lại.",
+        "buyer": "Chủ động theo dõi tiến độ và liên hệ khi cần.",
+        "business": "Giảm thao tác thông báo lặp lại với trạng thái đơn được đồng bộ.",
+        "condition": "Cần trạng thái từ phần mềm bán hàng/giao vận và mẫu tin giao dịch hợp lệ.",
+        "steps": [
+          {
+            "title": "Đặt đơn thành công",
+            "kind": "success",
+            "headline": "Đã tiếp nhận đơn #CNV0148",
+            "detail": "Thương hiệu sẽ xác nhận theo quy trình xử lý đơn.",
+            "cta": "Xem đơn hàng"
+          },
+          {
+            "title": "Nhận xác nhận",
+            "kind": "message",
+            "headline": "Đơn của bạn đã được xác nhận",
+            "detail": "Giá trị 350.000đ • Thông tin giao hàng theo đơn đã đặt",
+            "cta": "Theo dõi đơn"
+          },
+          {
+            "title": "Đang chuẩn bị hàng",
+            "kind": "order",
+            "headline": "Đơn hàng đang được chuẩn bị",
+            "detail": "Hệ thống hiển thị trạng thái đã nhận từ nguồn kết nối.",
+            "cta": "Xem tiến độ"
+          },
+          {
+            "title": "Bàn giao giao vận",
+            "kind": "order",
+            "headline": "Đơn hàng đang được giao",
+            "detail": "Thông tin vận chuyển chỉ hiển thị nếu nguồn có cung cấp.",
+            "cta": "Xem thông tin giao"
+          },
+          {
+            "title": "Giao hàng thành công",
+            "kind": "survey",
+            "headline": "Bạn hài lòng với trải nghiệm chứ?",
+            "detail": "Sau khi có trạng thái đã giao, mời khách chia sẻ đánh giá.",
+            "cta": "Gửi đánh giá"
+          }
+        ]
+      },
+      {
+        "title": "Chăm sóc đúng dịp, nhắc mua đúng chu kỳ",
+        "problem": "Khó nhớ sinh nhật và thời điểm khách có thể cần mua bổ sung khi số lượng khách tăng.",
+        "buyer": "Nhận lời nhắc có liên quan và quyền lợi đúng dịp đã đăng ký.",
+        "business": "Thiết lập lịch chăm sóc, giới hạn tần suất và theo dõi phản hồi.",
+        "condition": "Ví dụ dưới đây chọn nhánh sinh nhật; nhánh mua lại dùng lịch sử mua và chu kỳ riêng, có cơ chế dừng nhắc.",
+        "steps": [
+          {
+            "title": "Cập nhật sở thích nhận tin",
+            "kind": "profile",
+            "headline": "Chọn cách bạn muốn được chăm sóc",
+            "detail": "Ngày sinh tự nguyện • Chủ đề quan tâm • Lựa chọn nhận tin",
+            "cta": "Lưu lựa chọn"
+          },
+          {
+            "title": "Nhận lời chúc đúng dịp",
+            "kind": "message",
+            "headline": "Chúc mừng sinh nhật Nguyễn Phi!",
+            "detail": "Thương hiệu gửi bạn lời chúc và một quyền lợi trong tháng sinh nhật.",
+            "cta": "Mở quà sinh nhật"
+          },
+          {
+            "title": "Xem quà sinh nhật",
+            "kind": "voucher",
+            "headline": "Quà sinh nhật 50.000đ",
+            "detail": "Đơn từ 500.000đ • Dùng trong tháng • Mỗi người 1 lần",
+            "cta": "Khám phá sản phẩm"
+          },
+          {
+            "title": "Dùng khi có nhu cầu",
+            "kind": "checkout",
+            "headline": "Quyền lợi sinh nhật đã áp dụng",
+            "detail": "Giỏ hàng 650.000đ • Giảm 50.000đ • Chưa gồm phí giao",
+            "cta": "Đặt hàng · 600.000đ"
+          },
+          {
+            "title": "Quản lý kết nối",
+            "kind": "consent",
+            "headline": "Bạn luôn chủ động lựa chọn",
+            "detail": "Cập nhật chủ đề quan tâm hoặc lựa chọn nhận tin theo khả năng kênh.",
+            "cta": "Quản lý lựa chọn"
+          }
+        ]
+      }
+    ]
+  }
+]</script>
+<script id="proposal-config" type="application/json">{"customer": "thương hiệu bán lẻ của bạn", "appName": "CNV Retail", "color": "#d51d50", "logo": "data:image/png;base64,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", "enabled": [[true, true, true], [true, true, true], [true, true, true], [true, true, true], [true, true, true], [true, true, true]]}</script>
+<script id="proposal-script">
+'use strict';
+const DATA=JSON.parse(document.getElementById('proposal-data').textContent);
+const DEFAULT_LOGO="data:image/png;base64,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";
+const DEFAULT_CONFIG={customer:'thương hiệu bán lẻ của bạn',appName:'CNV Retail',color:'#d51d50',logo:DEFAULT_LOGO,enabled:DATA.map(s=>s.flows.map(()=>true))};
+let config=JSON.parse(document.getElementById('proposal-config').textContent);
+// PRICE DATA: dùng số tiền VND, không dùng chuỗi. null nghĩa là chưa có báo giá.
+const PRICING=[
+{id:'base',name:'Nền tảng Mini App & dữ liệu khách hàng',desc:'Kênh thành viên, hồ sơ khách và phạm vi nền tảng được thống nhất.',required:true,first:null,renew:null},
+{id:'loyalty',name:'Thành viên, tích điểm & ưu đãi',desc:'Thiết lập quyền lợi, hạng thành viên và chương trình ưu đãi.',required:false,first:null,renew:null},
+{id:'automation',name:'Phân nhóm & chăm sóc tự động',desc:'Kịch bản chăm sóc theo dữ liệu, sự kiện và kênh được hỗ trợ.',required:false,first:null,renew:null},
+{id:'integration',name:'Kết nối phần mềm bán hàng / CRM',desc:'Khảo sát API, trường dữ liệu, chiều đồng bộ và đối soát.',required:false,first:null,renew:null},
+{id:'referral',name:'Chương trình giới thiệu khách hàng',desc:'Liên kết giới thiệu, điều kiện ghi nhận và quyền lợi.',required:false,first:null,renew:null},
+{id:'service',name:'Thiết lập, đào tạo & đồng hành vận hành',desc:'Chốt phạm vi bàn giao, đào tạo, hỗ trợ và thời gian thực hiện.',required:false,first:null,renew:null}
+];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>new Intl.NumberFormat('vi-VN').format(n)+'đ';
+const art=(large=false)=>`<div class="art ${large?'large':''}"><div class="bottle"></div><div class="bottle tall"></div><div class="box">RETAIL</div></div>`;
+const row=(a,b)=>`<div class="app-row"><span>${esc(a)}</span><b>${esc(b)}</b></div>`;
+const card=(head,body,cl='')=>`<div class="appcard ${cl}"><h4>${esc(head)}</h4>${body}</div>`;
+const products=()=>`<div class="product-grid"><div>${art()}<p>Bộ chăm sóc hằng ngày</p><b>350.000đ</b></div><div>${art()}<p>Bộ tiện ích gia đình</p><b>450.000đ</b></div></div>`;
+const avatar=()=>`<div class="avatar-row"><div class="avatar">NP</div><div><b>Nguyễn Phi</b><div class="appsmall">Thành viên đã liên kết</div></div></div>`;
+function qr(){let r='';for(let y=0;y<25;y++)for(let x=0;x<25;x++){let finder=false,inside=false;for(const [a,b]of [[0,0],[18,0],[0,18]]){if(x>=a&&x<a+7&&y>=b&&y<b+7){inside=true;let u=x-a,v=y-b;finder=u===0||v===0||u===6||v===6||(u>=2&&u<=4&&v>=2&&v<=4)}}if(finder||(!inside&&((x*7+y*11+x*y)%7<3)))r+=`<rect x="${x+2}" y="${y+2}" width="1" height="1"/>`}return `<div class="qrbox"><svg viewBox="0 0 29 29" role="img" aria-label="Mã QR minh họa, không dùng để quét"><rect width="29" height="29" fill="white"/><g fill="#252338">${r}</g></svg><div class="appsmall center">MÃ MÔ PHỎNG</div></div>`}
+function screenContent(st){const h=esc(st.headline),d=esc(st.detail);const base=`<div class="app-title">${h}</div><div class="app-detail">${d}</div>`;switch(st.kind){
+case 'home':return `<span class="appbadge">KÊNH MUA SẮM CHÍNH CHỦ</span>${base}${art()}<div class="appcard pink">${/hôm nay/.test(st.headline)?row('Tích điểm','Theo mỗi đơn')+row('Thành viên','Quyền lợi riêng')+row('Ưu đãi','Theo chương trình'):row('Thành viên','Nguyễn Phi')+row('Điểm khả dụng','520')+row('Ưu đãi của bạn','3')}</div>`;
+case 'member':return `${base}<div class="appcard dark">${avatar()}<p style="margin-top:12px">THẺ THÀNH VIÊN</p><strong>${/thành viên mới/.test(st.headline)?"Thành viên mới":/480|20/.test(st.detail)?"Hạng Bạc":"Hạng Vàng"}</strong><div class="progress"></div><div class="appsmall" style="color:#ddd9ee">Quyền lợi theo chính sách thương hiệu</div></div>${card('Quyền lợi của bạn',row('Tích điểm','Theo đơn')+row('Ưu đãi riêng','Xem ngay')+row('Quà sinh nhật','Trong tháng'))}`;
+case 'form':return `${base}<div class="field">Họ tên &nbsp; Nguyễn Phi</div><div class="field">Số điện thoại &nbsp; 09•• ••• •••</div><div class="field">Email &nbsp; Không bắt buộc</div><div class="check">Tôi đã đọc mục đích sử dụng thông tin.</div><div class="check">Tôi chọn nhận nội dung và quyền lợi phù hợp.</div>${card('Thông tin của bạn','Chỉ cung cấp những thông tin cần thiết.','pink')}`;
+case 'voucher':return `${base}<div class="voucher-ticket"><span class="appsmall">QUYỀN LỢI THÀNH VIÊN</span><strong>${/10%/.test(st.headline)?'10%':/50/.test(st.headline)?'50.000đ':/30/.test(st.headline)?'30.000đ':'Ưu đãi riêng'}</strong><div class="appsmall" style="margin-top:7px">${d}</div></div>${card('Điều kiện sử dụng',row('Đối tượng','Thành viên')+row('Kênh áp dụng','Theo chương trình')+row('Kết hợp ưu đãi','Theo chính sách'))}`;
+case 'checkout':return `${base}<div class="appcard">${row('Nhận hàng','Địa chỉ đã lưu')}${row('Người nhận','Nguyễn Phi')}</div>${card('Giỏ hàng',`<div class="avatar-row"><div style="width:48px">${art()}</div><div>Bộ sản phẩm<br><b>Số lượng: 1</b></div></div>`)}<div class="appcard pink">${row('Ưu đãi','Đã kiểm tra')}${row('Thanh toán','Khi nhận hàng')}</div><p class="appsmall">Phí giao hàng và điều kiện cuối cùng được xác nhận khi đặt đơn.</p>`;
+case 'success':return `<div class="success-mark">✓</div><div class="center">${base}</div>${card('Thông tin đã được ghi nhận',row('Tài khoản','Nguyễn Phi')+row('Trạng thái','Theo điều kiện')+row('Chi tiết','Có thể tra cứu'))}${art()}`;
+case 'points':return `${base}<div class="appcard pink"><span class="appsmall">ĐIỂM THÀNH VIÊN</span><br><strong>${/480|20/.test(st.detail)?'480':'520'}</strong><div class="progress"></div><p class="appsmall">Theo chính sách tích điểm và xét hạng</p></div>${card('Lịch sử điểm',row('Đơn #CNV0128','+35 điểm')+row('Đổi quyền lợi','−20 điểm')+row('Đơn #CNV0102','+50 điểm'))}`;
+case 'catalog':return `${base}<div class="field">⌕ &nbsp; Tìm sản phẩm phù hợp</div><span class="appbadge">GỢI Ý TRONG CHIẾN DỊCH</span>${products()}${card('Mua sắm thuận tiện','Xem mô tả, chính sách và quyền lợi trước khi đặt hàng.','pink')}`;
+case 'message':return `<span class="appbadge">TIN NHẮN MINH HỌA</span><div class="appsmall center">Hôm nay · 09:00</div><div class="bubble"><div class="msg-banner">${esc(config.appName)}</div><h4 style="font-size:12px;margin-top:9px">${h}</h4><p style="margin-top:6px">${d}</p><div class="msg-link">${esc(st.cta)} →</div></div><p class="appsmall">Kênh, mẫu tin, quyền gửi và đối tượng nhận theo điều kiện thực tế.</p>`;
+case 'order':return `${base}${card('Đơn #CNV0128',row('Khách hàng','Nguyễn Phi')+row('Giá trị','350.000đ')+row('Nguồn','Đã liên kết'))}<div class="appcard"><div class="timeline-item">Đã tiếp nhận<br><span class="appsmall">Thông tin đơn hợp lệ</span></div><div class="timeline-item">Đang xử lý<br><span class="appsmall">Cập nhật theo nguồn</span></div><div class="timeline-item">Thông tin giao hàng<br><span class="appsmall">Tra cứu khi có dữ liệu</span></div></div>`;
+case 'social':return `<div class="appcard">${avatar()}<p style="margin-top:8px">${h}</p><p class="appsmall">${d}</p></div>${art(true)}<div class="appcard pink"><h4>Quyền lợi thành viên đang chờ bạn</h4>Khám phá thương hiệu và đăng ký kết nối.</div>`;
+case 'consent':return `${base}${card('Mục đích sử dụng dữ liệu','Quản lý thành viên, quyền lợi và phục vụ nhu cầu của bạn.','pink')}<div class="choice selected">✓ Thông tin cần để tạo tài khoản</div><div class="choice selected">✓ Chủ đề tôi chọn quan tâm</div><div class="choice">○ Lựa chọn nhận tin tiếp thị</div><p class="appsmall">Bạn xem nội dung cấp quyền và chủ động quyết định.</p>`;
+case 'profile':return `${/NHÂN VIÊN/.test(st.detail)?'<span class="screen-mode">MÔ PHỎNG • GÓC NHÌN NHÂN VIÊN</span>':''}${base}<div class="appcard">${avatar()}</div>${card('Thông tin đã liên kết',row('Thành viên','Hạng Vàng')+row('Điểm','520')+row('Liên hệ','Đã xác nhận'))}${card('Mối quan tâm',row('Nhóm quan tâm','Gia đình')+row('Lựa chọn nhận tin','Có thể cập nhật'))}`;
+case 'qr':return `${base}${qr()}<p class="appsmall center">Mã minh họa để trình bày hành trình.</p>${card('Kết nối thuận tiện','Mở đúng điểm chạm để xem thông tin và quyền lợi.','pink')}`;
+case 'survey':return `${base}<div class="choice selected">✓ Chất lượng sản phẩm</div><div class="choice">○ Giá phù hợp</div><div class="choice selected">✓ Quyền lợi thành viên</div><div class="choice">○ Tiện lợi khi mua sắm</div><div class="field">Chia sẻ thêm (không bắt buộc)</div><p class="appsmall">Câu trả lời minh họa • Bạn có thể điều chỉnh lựa chọn.</p>`;
+case 'article':return `${art()}${base}${card('Gợi ý dành cho bạn','Bắt đầu từ nhu cầu thực tế, đọc thông tin sản phẩm và chọn cách sử dụng phù hợp.')}<p class="appsmall">Nội dung do thương hiệu biên tập và kiểm duyệt.</p>`;
+case 'product':return `${art(true)}${base}<strong style="font-size:18px;color:var(--primary)">350.000đ</strong><div class="appcard">${row('Số lượng','−  1  +')}${row('Thông tin','Xem mô tả')}${row('Chính sách','Theo cửa hàng')}</div>`;
+case 'chat':return `${base}<div class="bubble user">Mình muốn được tư vấn thêm về sản phẩm đã mua.</div><div class="bubble">Chào Nguyễn Phi, mình kiểm tra lại nhu cầu hiện tại để hỗ trợ bạn nhé.</div><div class="appsmall center">Nhân viên tiếp tục hỗ trợ khi cần</div>`;
+case 'timeline':return `<span class="screen-mode">MÔ PHỎNG • GÓC NHÌN NHÂN VIÊN</span>${base}<div class="appcard"><div class="timeline-item">Đăng ký thành viên<br><span class="appsmall">Nguồn đã ghi nhận</span></div><div class="timeline-item">Mua bộ chăm sóc<br><span class="appsmall">Giao dịch đã liên kết</span></div><div class="timeline-item">Gửi yêu cầu tư vấn<br><span class="appsmall">Thông tin được phép xem</span></div></div>`;
+case 'segments':return `<span class="screen-mode">MÔ PHỎNG • GÓC NHÌN NHÂN VIÊN</span>${base}<div class="appcard"><h4>Phân nhóm RFM</h4><div class="mini-chart"><i style="height:45%"></i><i style="height:83%"></i><i style="height:58%"></i><i style="height:70%"></i></div>${row('Khách mới','Theo ngưỡng')}${row('Khách mua đều','Theo ngưỡng')}${row('Lâu chưa quay lại','Theo ngưỡng')}</div><p class="appsmall">Dữ liệu biểu đồ minh họa, không phải số liệu thực tế.</p>`;
+case 'oa':return `<div class="avatar" style="margin:6px auto">CNV</div><div class="center">${base}</div>${card('Kênh kết nối của thương hiệu','Nội dung hữu ích • Hỗ trợ • Chương trình dành cho khách hàng','pink')}${art()}<div class="check">Chủ động chọn quan tâm và quản lý kết nối.</div>`;
+case 'referral':return `${base}<div class="appcard pink center"><div style="font-size:30px">↗</div><h4>Mời bạn cùng khám phá</h4><strong style="font-size:18px">PHI028</strong></div>${card('Cách ghi nhận',row('Lời mời','Liên kết cá nhân')+row('Điều kiện','Giao dịch hợp lệ')+row('Quyền lợi','Sau đối soát'))}<p class="appsmall">Không tự động ghi thưởng cho đơn hoàn/hủy hoặc không đủ điều kiện.</p>`;
+default:return base;
+}}
+function phone(st){return `<div class="phone"><div class="phone-glass"><div class="statusbar"><span>9:41</span><span class="island"></span><span class="status-icons">▮▮ ◒ ▰</span></div><div class="appbar"><span class="app-name"><span class="appmark">♥</span>${esc(config.appName)}</span><span>••• &nbsp; ◉</span></div><div class="appbody">${screenContent(st)}</div><div class="app-actions"><div class="app-btn">${esc(st.cta)}</div></div><div class="appnav"><span class="active"><i>⌂</i>Trang chủ</span><span><i>▦</i>Sản phẩm</span><span><i>♢</i>Ưu đãi</span><span><i>♙</i>Tài khoản</span></div><span class="home-indicator"></span></div></div>`}
+function flowHTML(flow,si,fi){return `<article class="flow" id="flow-${si}-${fi}"><div class="flow-head"><span class="flow-number">LUỒNG ${String(si+1).padStart(2,'0')}.${fi+1}</span><h3>${esc(flow.title)}</h3></div><p class="flow-problem"><strong>Vấn đề được giải quyết:</strong> ${esc(flow.problem)}</p><p class="flow-caption"><span class="dot"></span>5 màn hình mô phỏng · Bấm phóng lớn để xem và cuộn nội dung</p><div class="screens">${flow.steps.map((st,idx)=>`<div class="screen-step"><button class="screen-trigger" data-si="${si}" data-fi="${fi}" data-step="${idx}" aria-label="Phóng lớn bước ${idx+1}: ${esc(st.title)}">${phone(st)}<span class="zoom-label">Phóng lớn ↗</span></button><div class="step-label"><b>${idx+1}</b><span>${esc(st.title)}</span></div><p class="step-desc">${esc(st.detail.replace('GÓC NHÌN NHÂN VIÊN • ',''))}</p></div>`).join('')}</div><div class="outcomes"><div><p class="outcome-label">Kết quả cho người mua</p><p>${esc(flow.buyer)}</p></div><div><p class="outcome-label">Giá trị cho doanh nghiệp</p><p>${esc(flow.business)}</p></div></div><p class="condition"><strong>Điều kiện / lưu ý:</strong> ${esc(flow.condition)}</p></article>`}
+function render(){document.documentElement.style.setProperty('--primary',config.color);document.documentElement.style.setProperty('--soft',config.color+'0c');document.querySelectorAll('.brand-logo').forEach(i=>i.src=config.logo);document.getElementById('cnv-footer-logo').src=DEFAULT_LOGO;document.querySelectorAll('.customer-name').forEach(x=>x.textContent=config.customer);let sc=0,fc=0;document.getElementById('sections').innerHTML=DATA.map((sec,si)=>{const flows=sec.flows.map((fl,fi)=>config.enabled[si][fi]?flowHTML(fl,si,fi):'').join('');if(!flows)return '';sc++;fc+=config.enabled[si].filter(Boolean).length;return `<section class="content-section container" id="${sec.id}"><div class="section-head"><div class="section-kicker"><span class="section-index">${String(si+1).padStart(2,'0')}</span><p class="eyebrow">Nhu cầu & giải pháp</p></div><h2>${esc(sec.title)}</h2><div class="insight-band"><div><span class="label">Nhu cầu doanh nghiệp</span><strong>${esc(sec.pain)}</strong></div><div><span class="label">Hướng giải quyết</span><p>${esc(sec.intro)}</p></div></div><div class="tags">${sec.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div></div>${flows}</section>`}).join('')||'<div class="container empty-state">Chưa chọn luồng minh họa. Mở Tùy chỉnh mẫu để chọn nội dung.</div>';document.getElementById('hero-count').textContent=`${sc} nhu cầu · ${fc} luồng · ${fc*5} màn hình`;document.getElementById('config-count').textContent=`Đang hiển thị ${fc} / 18 luồng minh họa.`;document.getElementById('overview-grid').innerHTML=DATA.map((s,i)=>config.enabled[i].some(Boolean)?`<a href="#${s.id}" class="insight-link"><b>${String(i+1).padStart(2,'0')}</b><span>${esc(s.pain)}</span></a>`:'').join('');document.getElementById('hero-path').innerHTML=DATA.map((s,i)=>config.enabled[i].some(Boolean)?`<a class="path-item" href="#${s.id}"><b>${String(i+1).padStart(2,'0')}</b>${esc(s.short)}</a>`:'').join('');document.querySelector('.mainnav a[href="#quay-lai"]').href='#'+(DATA.find((s,i)=>config.enabled[i].some(Boolean))?.id||'nhu-cau');}
+function renderConfig(){document.getElementById('brand-name').value=config.customer;document.getElementById('app-name').value=config.appName;document.getElementById('brand-color').value=config.color;document.getElementById('flow-config').innerHTML=DATA.map((s,si)=>`<details ${si===0?'open':''}><summary>${String(si+1).padStart(2,'0')}. ${esc(s.short)}</summary><label class="flow-check"><input type="checkbox" data-section="${si}" ${config.enabled[si].every(Boolean)?'checked':''}><b>Chọn / bỏ cả nhóm</b></label>${s.flows.map((f,fi)=>`<label class="flow-check"><input type="checkbox" data-config-si="${si}" data-config-fi="${fi}" ${config.enabled[si][fi]?'checked':''}>${esc(f.title)}</label>`).join('')}</details>`).join('')}
+function closeConfig(){document.getElementById('config-panel').hidden=true;document.getElementById('config-open').setAttribute('aria-expanded','false');document.getElementById('config-open').focus()}
+document.getElementById('config-open').onclick=()=>{const p=document.getElementById('config-panel');p.hidden=!p.hidden;document.getElementById('config-open').setAttribute('aria-expanded',String(!p.hidden));if(!p.hidden)document.getElementById('brand-name').focus()};document.getElementById('config-close').onclick=closeConfig;
+for(const [id,key]of [['brand-name','customer'],['app-name','appName'],['brand-color','color']])document.getElementById(id).addEventListener('input',e=>{config[key]=e.target.value||DEFAULT_CONFIG[key];render()});
+document.getElementById('brand-upload').onchange=e=>{const file=e.target.files[0];if(!file)return;if(file.size>3*1024*1024){document.getElementById('config-feedback').textContent='Vui lòng chọn logo dưới 3 MB.';return}if(!['image/png','image/jpeg','image/webp','image/svg+xml'].includes(file.type)){document.getElementById('config-feedback').textContent='Định dạng logo chưa được hỗ trợ.';return}const r=new FileReader;r.onload=()=>{config.logo=r.result;render();document.getElementById('config-feedback').textContent='Đã cập nhật logo.'};r.readAsDataURL(file)};
+document.getElementById('flow-config').onchange=e=>{const t=e.target;if(t.dataset.section!==undefined){config.enabled[+t.dataset.section]=config.enabled[+t.dataset.section].map(()=>t.checked)}else if(t.dataset.configSi!==undefined){config.enabled[+t.dataset.configSi][+t.dataset.configFi]=t.checked}renderConfig();render()};
+document.getElementById('reset-config').onclick=()=>{config=JSON.parse(JSON.stringify(DEFAULT_CONFIG));renderConfig();render();document.getElementById('config-feedback').textContent='Đã khôi phục mẫu gốc.'};
+// Export keeps the chosen module selection, brand and live pricing state in one offline HTML file.
+document.getElementById('download-html').onclick=()=>{const clone=document.documentElement.cloneNode(true);clone.querySelector('#proposal-config').textContent=JSON.stringify(config).replace(/</g,'\\u003c');clone.querySelector('#config-panel').hidden=true;clone.querySelector('#config-open').setAttribute('aria-expanded','false');clone.querySelector('#viewer').removeAttribute('open');clone.querySelector('#viewer-stage').innerHTML='';clone.querySelector('#config-feedback').textContent='';clone.querySelector('#brand-upload').value='';const blob=new Blob(['<!doctype html>\n'+clone.outerHTML],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='CNVCDP-RETAIL-PROPOSAL-CUSTOM.html';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);document.getElementById('config-feedback').textContent='Đã tải bản HTML theo lựa chọn hiện tại.'};
+const viewer=document.getElementById('viewer');let viewing=null,lastTrigger=null;
+function showScreen(si,fi,step){viewing={si,fi,step};const f=DATA[si].flows[fi];document.getElementById('viewer-title').textContent=f.steps[step].title;document.getElementById('viewer-stage').innerHTML=phone(f.steps[step]);document.getElementById('viewer-count').textContent=`Màn hình ${step+1} / 5`;document.getElementById('viewer-prev').disabled=step===0;document.getElementById('viewer-next').disabled=step===4;if(!viewer.open)viewer.showModal()}
+document.getElementById('sections').onclick=e=>{const b=e.target.closest('.screen-trigger');if(b){lastTrigger=b;showScreen(+b.dataset.si,+b.dataset.fi,+b.dataset.step)}};
+document.getElementById('viewer-close').onclick=()=>viewer.close();viewer.addEventListener('click',e=>{if(e.target===viewer)viewer.close()});viewer.addEventListener('close',()=>lastTrigger?.focus());document.getElementById('viewer-prev').onclick=()=>{if(viewing.step>0)showScreen(viewing.si,viewing.fi,viewing.step-1)};document.getElementById('viewer-next').onclick=()=>{if(viewing.step<4)showScreen(viewing.si,viewing.fi,viewing.step+1)};document.addEventListener('keydown',e=>{if(viewer.open&&viewing){if(e.key==='ArrowRight'&&viewing.step<4)showScreen(viewing.si,viewing.fi,viewing.step+1);if(e.key==='ArrowLeft'&&viewing.step>0)showScreen(viewing.si,viewing.fi,viewing.step-1)}else if(e.key==='Escape'&&!document.getElementById('config-panel').hidden)closeConfig()});
+function renderPrices(){document.getElementById('price-rows').innerHTML=PRICING.map(p=>`<tr><td><input type="checkbox" id="price-${p.id}" data-price="${p.id}" aria-label="Chọn ${esc(p.name)}" ${p.required?'checked disabled':(config.priceSelection?.[p.id]===false?'':'checked')}></td><td><label for="price-${p.id}"><b>${esc(p.name)}</b></label>${p.required?' <span class="pill" style="font-size:8px">NỀN TẢNG</span>':''}<small>${esc(p.desc)}</small></td><td>${p.first===null?'Chờ báo giá':money(p.first)}</td><td>${p.renew===null?'Chờ báo giá':money(p.renew)}</td></tr>`).join('');updatePrices()}
+function updatePrices(){config.priceSelection=Object.fromEntries(PRICING.map(p=>[p.id,p.required||document.getElementById('price-'+p.id).checked]));const chosen=PRICING.filter(p=>p.required||document.getElementById('price-'+p.id).checked);for(const [key,id]of [['first','first-total'],['renew','renew-total']])document.getElementById(id).textContent=chosen.some(p=>p[key]===null)?'Chờ báo giá':money(chosen.reduce((a,p)=>a+p[key],0));document.getElementById('price-selection').textContent=`Đang chọn ${chosen.length} hạng mục · ${chosen.filter(p=>!p.required).length} tùy chọn`;}
+document.getElementById('price-rows').onchange=updatePrices;
+renderConfig();render();renderPrices();
+</script>
+</body>
+</html>
